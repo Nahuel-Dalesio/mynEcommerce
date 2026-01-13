@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+:root{
+  --colorprincipal: #3A4454;
+  --colorsecundario: #ddedf8;
+  --colorterciario: #53687E;
+  --colorinfo: #EFF7FF;
+  --coloracento: #06D6A0;
+  --coloracento2:rgb(198, 169, 6);
+  --colorbordes:rgba(0,0,0,0.2);
+}
+.barraInicio{
+  display: Flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--colorprincipal);
+  color: white;
+}
+.boton{
+  background-color:var(--colorprincipal);
+  box-shadow: var(--colorterciario);
+  color:white;
+  cursor: pointer;
+  margin: 10px;
+  padding: 10px 20px;
+  border: rgba(255, 255, 255, 0.334) solid 1px;
+  border-radius: 10px;
+}
+.boton:hover{
+  color: var(--coloracento2);
+  border: solid var(--coloracento2) 1px;
+}
+.modal {
+  position: fixed;
+  z-index: 3;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--colorprincipal);
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  max-width: 500px;
+  border-radius: 30px;
+  position: relative;
+}
+.contLogoModal{
+  text-align: center;
+
+}
+.logoModal{
+  width: 150px;
+
+}
+.close {
+  color: var(--colorprincipal);
+  font-size: 50px;
+  font-weight: bold;
+  position: absolute;
+  right:10px;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tituloModal{
+  font-size: 30px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.btnCrear{
+  cursor: pointer;
+  padding: 15px 60px;
+  border-radius:20px;
+  background-color: var(--colorprincipal);
+  box-shadow:5px 3px 10px 2px #3A4454;
+  color: var(--colorinfo);
+}
+.btnCrear:hover{
+  background-color: var(--coloracento);
+  color: var(--colorprincipal);
+}
+.input{
+  margin: 8px 8px 10px 0;
+  padding:10px 20px;
+  border-radius: 30px;
+  color: black;
+  border:solid 1px var(--colorprincipal);
+}
+#btnIniciar{
+  cursor: pointer;
+  padding: 15px 60px;
+  border-radius:20px;
+  background-color: var(--colorprincipal);
+  box-shadow:5px 3px 10px 2px #3A4454;
+  color: var(--colorinfo);
+}
+#btnIniciar:hover{
+  background-color: var(--coloracento);
+  color: var(--colorprincipal);
+}
