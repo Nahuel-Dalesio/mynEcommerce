@@ -23,6 +23,8 @@ FROM producto p
 LEFT JOIN imagenesproducto i ON i.idProducto = p.idProducto AND i.esPrincipal = 1
 WHERE p.categoria = ?`;
   
+  const params = [categoria];
+  
   conexion.query(query, params, (err, rows) => {
     if (err) {
       console.error(err);

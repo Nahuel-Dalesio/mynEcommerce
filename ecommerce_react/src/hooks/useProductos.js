@@ -17,7 +17,7 @@ export function useProductos(categoria) {
     fetch(url)
       .then(res => res.json())
       .then(data => setProductos(data))
-      .catch(err => setError(err))
+      .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, [categoria]);
 
