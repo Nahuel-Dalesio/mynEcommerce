@@ -1,28 +1,61 @@
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
     <ul className="barra">
       <li className="logo deco">
-        <Link to="/">
+        <NavLink to="/" end>
           <img
             src="../public/logoMyn.jpg"
             alt="Logo"
           />
-        </Link>
+        </NavLink>
       </li>
+
       <li className="barraItems">
-        <Link to="/" className="barraLinks">Inicio</Link>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            `barraLinks ${isActive ? "activo" : ""}`
+          }
+        >
+          Inicio
+        </NavLink>
       </li>
+
       <li className="barraItems">
-        <Link to="/remeras" className="barraLinks">Remeras</Link>
+        <NavLink
+          to="/remeras"
+          className={({ isActive }) =>
+            `barraLinks ${isActive ? "activo" : ""}`
+          }
+        >
+          Remeras
+        </NavLink>
       </li>
+
       <li className="barraItems">
-        <Link to="/buzos" className="barraLinks">Buzos</Link>
+        <NavLink
+          to="/buzos"
+          className={({ isActive }) =>
+            `barraLinks ${isActive ? "activo" : ""}`
+          }
+        >
+          Buzos
+        </NavLink>
       </li>
+
       <li className="barraItems">
-        <Link to="/camperas" className="barraLinks">Camperas</Link>
+        <NavLink
+          to="/camperas"
+          className={({ isActive }) =>
+            `barraLinks ${isActive ? "activo" : ""}`
+          }
+        >
+          Camperas
+        </NavLink>
       </li>
     </ul>
   );

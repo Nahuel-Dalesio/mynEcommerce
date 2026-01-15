@@ -29,6 +29,10 @@
   text-decoration: none;
   margin: 2px;
   padding:8px;
+}
+.barraLinks.activo {
+  text-decoration: underline;
+  font-weight: 600;
   
 }
 .barraItems{

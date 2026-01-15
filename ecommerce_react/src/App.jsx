@@ -4,6 +4,7 @@ import CrearUsuarioModal from "./componentes/CrearUsuario.jsx";
 import Carrito from "./componentes/Carrito.jsx";
 import Navbar from "./componentes/Navbar.jsx";
 import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home.jsx";
 import Remeras from "./pages/Remeras.jsx";
 import Buzos from "./pages/Buzos.jsx";
 import Camperas from "./pages/Camperas.jsx";
@@ -58,7 +59,9 @@ function App() {
           hideProgressBar: true,
         });
         return prev.map((p) =>
-          p.idProducto === producto.idProducto ? { ...p, cantidad: p.cantidad + cantidad } : p
+          p.idProducto === producto.idProducto
+            ? { ...p, cantidad: p.cantidad + cantidad }
+            : p
         );
       }
       toast.success(`Producto "${producto.nombre}" agregado al carrito`, {
@@ -120,7 +123,16 @@ function App() {
       />
       <Navbar />
       <Routes>
-        <Route path="/" element={<h5>Productos destacados</h5>} />
+        <Route
+          path="/"
+          element={
+            <Home
+              abrirGaleria={(producto) => setProductoGaleria(producto)}
+              carrito={carrito}
+              agregarAlCarrito={agregarAlCarrito}
+            />
+          }
+        />
         <Route
           path="/remeras"
           element={
@@ -133,17 +145,23 @@ function App() {
         />
         <Route
           path="/buzos"
-          element={<Buzos abrirGaleria={(producto) => setProductoGaleria(producto)}
+          element={
+            <Buzos
+              abrirGaleria={(producto) => setProductoGaleria(producto)}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
-            />}
+            />
+          }
         />
         <Route
           path="/camperas"
-          element={<Camperas abrirGaleria={(producto) => setProductoGaleria(producto)}
+          element={
+            <Camperas
+              abrirGaleria={(producto) => setProductoGaleria(producto)}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
-            />}
+            />
+          }
         />
       </Routes>
       {productoGaleria && (
