@@ -1,6 +1,7 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
+
 function Remeras({ agregarAlCarrito, carrito, abrirGaleria }) {
   const { productos, loading, error } = useProductos("Remeras");
 

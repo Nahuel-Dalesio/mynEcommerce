@@ -14,13 +14,13 @@ import Swal from "sweetalert2";
 import GaleriaModal from "./componentes/GaleriaModal.jsx";
 
 function App() {
-  const [productoGaleria, setProductoGaleria] = useState(null);
+  const [imagenesGaleria, setImagenesGaleria] = useState([]);
+  const [mostrarGaleria, setMostrarGaleria] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(null);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
   const toggleCarrito = () => {
     setMostrarCarrito((prev) => !prev);
   };
-
   const [carrito, setCarrito] = useState(() => {
     const guardado = localStorage.getItem("carrito");
     return guardado ? JSON.parse(guardado) : [];
@@ -39,7 +39,6 @@ function App() {
       })
     );
   };
-  // TODO: AL AGREGAR PRODUCTOS YA EXISTENTES QUE SE VAYA SUMANDO EN EL MONTO
   const agregarAlCarrito = (producto, cantidad) => {
     setCarrito((prev) => {
       const existe = prev.find((p) => p.idProducto === producto.idProducto);
@@ -101,6 +100,22 @@ function App() {
       }
     });
   };
+  const abrirGaleria = async (producto) => {
+  // Si ya vienen imágenes (raro)
+  if (Array.isArray(producto.imagenes)) {
+    setImagenesGaleria(producto.imagenes);
+  } else {
+    // pedirlas al backend
+    const res = await fetch(
+      `http://localhost:3001/api/productos/imagenes/${producto.idProducto}`
+    );
+    const data = await res.json();
+
+    setImagenesGaleria(data.map(img => img.src));
+  }
+
+  setMostrarGaleria(true);
+};
   return (
     <>
       <Header
@@ -127,7 +142,7 @@ function App() {
           path="/"
           element={
             <Home
-              abrirGaleria={(producto) => setProductoGaleria(producto)}
+              abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
             />
@@ -137,7 +152,7 @@ function App() {
           path="/remeras"
           element={
             <Remeras
-              abrirGaleria={(producto) => setProductoGaleria(producto)}
+              abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
             />
@@ -147,7 +162,7 @@ function App() {
           path="/buzos"
           element={
             <Buzos
-              abrirGaleria={(producto) => setProductoGaleria(producto)}
+              abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
             />
@@ -157,17 +172,17 @@ function App() {
           path="/camperas"
           element={
             <Camperas
-              abrirGaleria={(producto) => setProductoGaleria(producto)}
+              abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
             />
           }
         />
       </Routes>
-      {productoGaleria && (
+      {mostrarGaleria && (
         <GaleriaModal
-          imagenes={productoGaleria.imagenes || productoGaleria.imagen}
-          onClose={() => setProductoGaleria(null)}
+          imagenes={imagenesGaleria}
+          onClose={() => setMostrarGaleria(false)}
         />
       )}
 
