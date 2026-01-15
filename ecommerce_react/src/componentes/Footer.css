@@ -1,0 +1,30 @@
+img{
+  width: 150px;
+  margin: 10px;
+  padding: 6px;
+  border-radius: 20px;
+}
+.footer-top {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+.logo{
+  list-style: none;
+}
+.logo a{
+    text-decoration: none;
+    color: var(--colorprimario);
+}
+.logo a:hover{
+    color: var(--colorterciario);
+    text-decoration: underline;
+}
+.logoRedes{
+  width: 100px;
+  margin: 6px;
+  padding: 8px;
+  border-radius: 10px;
+
+}

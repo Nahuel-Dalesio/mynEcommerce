@@ -12,6 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import GaleriaModal from "./componentes/GaleriaModal.jsx";
+import Footer from "./componentes/Footer.jsx";
 
 function App() {
   const [imagenesGaleria, setImagenesGaleria] = useState([]);
@@ -185,7 +186,7 @@ function App() {
           onClose={() => setMostrarGaleria(false)}
         />
       )}
-
+      <Footer />
       <ToastContainer />
     </>
   );
