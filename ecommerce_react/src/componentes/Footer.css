@@ -8,7 +8,9 @@ img{
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height: 150px;
     padding: 10px;
+    background-color: var(--colorsecundario);
 }
 .logo{
   list-style: none;
@@ -21,10 +23,24 @@ img{
     color: var(--colorterciario);
     text-decoration: underline;
 }
-.logoRedes{
-  width: 100px;
-  margin: 6px;
-  padding: 8px;
-  border-radius: 10px;
 
+.logoRedes {
+  width: 48px;
+  height: 48px;
+  margin: 6px;
+  fill: currentColor;
+}
+.footer-bottom {
+    text-align: center;
+    padding: 12px;
+    background-color: var(--colorterciario);
+    color: var(--colorsecundario);
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+.footer-brand{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
 }

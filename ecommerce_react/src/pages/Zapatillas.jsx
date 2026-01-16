@@ -1,17 +1,17 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
-function Buzos({ agregarAlCarrito, carrito, abrirGaleria }) {
-  const { productos, loading, error } = useProductos("Buzos");
+function Zapatillas({ agregarAlCarrito, carrito, abrirGaleria }) {
+  const { productos, loading, error } = useProductos("Zapatillas");
 
-  if (loading) return <p>Cargando buzos...</p>;
+  if (loading) return <p>Cargando zapatillas...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <h2>Buzos</h2>
+      
 
-      {productos.length === 0 && <p>No hay buzos</p>}
+      {productos.length === 0 && <p>No hay zapatillas</p>}
 
       <div id="productos">
         {productos.map(producto => (
@@ -28,4 +28,4 @@ function Buzos({ agregarAlCarrito, carrito, abrirGaleria }) {
   );
 }
 
-export default Buzos;
+export default Zapatillas;

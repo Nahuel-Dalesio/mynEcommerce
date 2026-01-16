@@ -38,23 +38,23 @@ function Navbar() {
 
       <li className="barraItems">
         <NavLink
-          to="/buzos"
+          to="/Abrigos"
           className={({ isActive }) =>
             `barraLinks ${isActive ? "activo" : ""}`
           }
         >
-          Buzos
+          Abrigos
         </NavLink>
       </li>
 
       <li className="barraItems">
         <NavLink
-          to="/camperas"
+          to="/Zapatillas"
           className={({ isActive }) =>
             `barraLinks ${isActive ? "activo" : ""}`
           }
         >
-          Camperas
+          Zapatillas
         </NavLink>
       </li>
     </ul>

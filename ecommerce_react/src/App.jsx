@@ -6,8 +6,8 @@ import Navbar from "./componentes/Navbar.jsx";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Remeras from "./pages/Remeras.jsx";
-import Buzos from "./pages/Buzos.jsx";
-import Camperas from "./pages/Camperas.jsx";
+import Abrigos from "./pages/Abrigos.jsx";
+import Zapatillas from "./pages/Zapatillas.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
@@ -160,9 +160,9 @@ function App() {
           }
         />
         <Route
-          path="/buzos"
+          path="/Abrigos"
           element={
-            <Buzos
+            <Abrigos
               abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
@@ -170,9 +170,9 @@ function App() {
           }
         />
         <Route
-          path="/camperas"
+          path="/Zapatillas"
           element={
-            <Camperas
+            <Zapatillas
               abrirGaleria={abrirGaleria}
               carrito={carrito}
               agregarAlCarrito={agregarAlCarrito}
