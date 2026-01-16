@@ -20,17 +20,31 @@ function Footer() {
         <li className="logo deco">
           <Link to="/Zapatillas">Zapatillas</Link>
         </li>
-        <li className="logo deco">
+        {/* <li className="logo deco">
           <Link to="/Contacto">Contacto</Link>
-        </li>
+        </li> */}
       </ul>
 
       <div className="footer-brand">
         <img className="logo" src="logoMyn.jpg" alt="logomyn" />
+        {/* #TODO Agregar paginas internas */}
         <div>
-          <LogoWhatsapp className="logoRedes"/>
-          <LogoFacebook className="logoRedes"/>
-          <LogoInstagram className="logoRedes"/>
+          <ul className="footer-contact">
+            <li className="logo pad">
+              <Link to="/AcercaDeMyn" className="font">ACERCA DE MYN</Link>
+            </li>
+            <li className="logo pad">
+              <Link to="/Contactanos" className="font">CONTACTANOS</Link>
+            </li>
+            <li className="logo pad">
+              <Link to="/Sugerencias" className="font">SUGERENCIAS</Link>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <a href="https://wa.me" target="_blank"><LogoWhatsapp className="logoRedes"/></a>
+          <a href="https://www.facebook.com" target="_blank"><LogoFacebook className="logoRedes"/></a>
+          <a href="https://www.instagram.com" target="_blank"><LogoInstagram className="logoRedes"/></a>
         </div>
       </div>
 
