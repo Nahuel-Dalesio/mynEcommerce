@@ -1,7 +1,7 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
-function Home({ agregarAlCarrito, carrito, abrirGaleria }) {
+function Home({ abrirGaleria }) {
   const { productos, loading, error } = useProductos();
 
   if (loading) return <p>Cargando Home...</p>;
@@ -18,8 +18,8 @@ function Home({ agregarAlCarrito, carrito, abrirGaleria }) {
           <ProductoCard
             key={producto.idProducto}
             producto={producto}
-            carrito={carrito}
-            agregarAlCarrito={agregarAlCarrito}
+            // carrito={carrito}
+            // agregarAlCarrito={agregarAlCarrito}
             abrirGaleria={abrirGaleria}
           />
         ))}

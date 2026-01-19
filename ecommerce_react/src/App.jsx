@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import GaleriaModal from "./componentes/GaleriaModal.jsx";
 import Footer from "./componentes/Footer.jsx";
+import ProductoDetalle from "./pages/ProductoDetalle.jsx";
 
 function App() {
   const [imagenesGaleria, setImagenesGaleria] = useState([]);
@@ -22,101 +23,101 @@ function App() {
   const toggleCarrito = () => {
     setMostrarCarrito((prev) => !prev);
   };
-  const [carrito, setCarrito] = useState(() => {
-    const guardado = localStorage.getItem("carrito");
-    return guardado ? JSON.parse(guardado) : [];
-  });
-  useEffect(() => {
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-  }, [carrito]);
-  const eliminarDelCarrito = (idProducto) => {
-    setCarrito((prev) =>
-      prev.flatMap((p) => {
-        if (p.idProducto !== idProducto) return p;
-        if (p.cantidad > 1) {
-          return { ...p, cantidad: p.cantidad - 1 };
-        }
-        return [];
-      })
-    );
-  };
-  const agregarAlCarrito = (producto, cantidad) => {
-    setCarrito((prev) => {
-      const existe = prev.find((p) => p.idProducto === producto.idProducto);
+  // const [carrito, setCarrito] = useState(() => {
+  //   const guardado = localStorage.getItem("carrito");
+  //   return guardado ? JSON.parse(guardado) : [];
+  // });
+  // useEffect(() => {
+  //   localStorage.setItem("carrito", JSON.stringify(carrito));
+  // }, [carrito]);
+  // const eliminarDelCarrito = (idProducto) => {
+  //   setCarrito((prev) =>
+  //     prev.flatMap((p) => {
+  //       if (p.idProducto !== idProducto) return p;
+  //       if (p.cantidad > 1) {
+  //         return { ...p, cantidad: p.cantidad - 1 };
+  //       }
+  //       return [];
+  //     })
+  //   );
+  // };
+  // const agregarAlCarrito = (producto, cantidad) => {
+  //   setCarrito((prev) => {
+  //     const existe = prev.find((p) => p.idProducto === producto.idProducto);
 
-      if (existe) {
-        if (existe.cantidad + cantidad > producto.stock) {
-          toast.error(`No hay suficiente stock de "${producto.nombre}"`, {
-            toastId: producto.idProducto, // id único
-            autoClose: 2000,
-            hideProgressBar: true,
-          });
-          return prev;
-        }
-        toast.info(`Se agregó otra unidad de "${producto.nombre}"`, {
-          toastId: producto.idProducto, // id único
-          autoClose: 1000,
-          hideProgressBar: true,
-        });
-        return prev.map((p) =>
-          p.idProducto === producto.idProducto
-            ? { ...p, cantidad: p.cantidad + cantidad }
-            : p
-        );
-      }
-      toast.success(`Producto "${producto.nombre}" agregado al carrito`, {
-        toastId: producto.idProducto, // id único
-        autoClose: 1000,
-        hideProgressBar: true,
-      });
-      return [...prev, { ...producto, cantidad }];
-    });
-  };
-  const totalCarrito = carrito.reduce(
-    (acc, prod) => acc + prod.precio * prod.cantidad,
-    0
-  );
-  const comprar = () => {
-    if (carrito.length === 0)
-      return Swal.fire({
-        title: "El carrito está vacío",
-      });
-    Swal.fire({
-      title: "¿Desea confirmar su compra?",
-      text: `Total a pagar: $${totalCarrito}`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Comprar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setMostrarCarrito(false);
-        setCarrito([]);
-        Swal.fire({
-          title: "¡Compra realizada con éxito!",
-          text: "Gracias por tu compra 😊",
-          icon: "success",
-          confirmButtonText: "Aceptar",
-        });
-      }
-    });
-  };
+  //     if (existe) {
+  //       if (existe.cantidad + cantidad > producto.stock) {
+  //         toast.error(`No hay suficiente stock de "${producto.nombre}"`, {
+  //           toastId: producto.idProducto, // id único
+  //           autoClose: 2000,
+  //           hideProgressBar: true,
+  //         });
+  //         return prev;
+  //       }
+  //       toast.info(`Se agregó otra unidad de "${producto.nombre}"`, {
+  //         toastId: producto.idProducto, // id único
+  //         autoClose: 1000,
+  //         hideProgressBar: true,
+  //       });
+  //       return prev.map((p) =>
+  //         p.idProducto === producto.idProducto
+  //           ? { ...p, cantidad: p.cantidad + cantidad }
+  //           : p
+  //       );
+  //     }
+  //     toast.success(`Producto "${producto.nombre}" agregado al carrito`, {
+  //       toastId: producto.idProducto, // id único
+  //       autoClose: 1000,
+  //       hideProgressBar: true,
+  //     });
+  //     return [...prev, { ...producto, cantidad }];
+  //   });
+  // };
+  // const totalCarrito = carrito.reduce(
+  //   (acc, prod) => acc + prod.precio * prod.cantidad,
+  //   0
+  // );
+  // const comprar = () => {
+  //   if (carrito.length === 0)
+  //     return Swal.fire({
+  //       title: "El carrito está vacío",
+  //     });
+  //   Swal.fire({
+  //     title: "¿Desea confirmar su compra?",
+  //     text: `Total a pagar: $${totalCarrito}`,
+  //     icon: "question",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Comprar",
+  //     cancelButtonText: "Cancelar",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       setMostrarCarrito(false);
+  //       setCarrito([]);
+  //       Swal.fire({
+  //         title: "¡Compra realizada con éxito!",
+  //         text: "Gracias por tu compra 😊",
+  //         icon: "success",
+  //         confirmButtonText: "Aceptar",
+  //       });
+  //     }
+  //   });
+  // };
   const abrirGaleria = async (producto) => {
-  // Si ya vienen imágenes (raro)
-  if (Array.isArray(producto.imagenes)) {
-    setImagenesGaleria(producto.imagenes);
-  } else {
-    // pedirlas al backend
-    const res = await fetch(
-      `http://localhost:3001/api/productos/imagenes/${producto.idProducto}`
-    );
-    const data = await res.json();
+    // Si ya vienen imágenes (raro)
+    if (Array.isArray(producto.imagenes)) {
+      setImagenesGaleria(producto.imagenes);
+    } else {
+      // pedirlas al backend
+      const res = await fetch(
+        `http://localhost:3001/api/productos/imagenes/${producto.idProducto}`
+      );
+      const data = await res.json();
 
-    setImagenesGaleria(data.map(img => img.src));
-  }
+      setImagenesGaleria(data.map((img) => img.src));
+    }
 
-  setMostrarGaleria(true);
-};
+    setMostrarGaleria(true);
+  };
   return (
     <>
       <Header
@@ -131,11 +132,11 @@ function App() {
         <IniciarSesionModal onClose={() => setMostrarModal(null)} />
       )} */}
       <Carrito
-        abierto={mostrarCarrito}
-        carrito={carrito}
-        eliminarDelCarrito={eliminarDelCarrito}
-        totalCarrito={totalCarrito}
-        comprar={comprar}
+      // abierto={mostrarCarrito}
+      // carrito={carrito}
+      // eliminarDelCarrito={eliminarDelCarrito}
+      // totalCarrito={totalCarrito}
+      // comprar={comprar}
       />
       <Navbar />
       <Routes>
@@ -144,8 +145,8 @@ function App() {
           element={
             <Home
               abrirGaleria={abrirGaleria}
-              carrito={carrito}
-              agregarAlCarrito={agregarAlCarrito}
+              // carrito={carrito}
+              // agregarAlCarrito={agregarAlCarrito}
             />
           }
         />
@@ -154,8 +155,8 @@ function App() {
           element={
             <Remeras
               abrirGaleria={abrirGaleria}
-              carrito={carrito}
-              agregarAlCarrito={agregarAlCarrito}
+              // carrito={carrito}
+              // agregarAlCarrito={agregarAlCarrito}
             />
           }
         />
@@ -164,8 +165,8 @@ function App() {
           element={
             <Abrigos
               abrirGaleria={abrirGaleria}
-              carrito={carrito}
-              agregarAlCarrito={agregarAlCarrito}
+              // carrito={carrito}
+              // agregarAlCarrito={agregarAlCarrito}
             />
           }
         />
@@ -174,10 +175,14 @@ function App() {
           element={
             <Zapatillas
               abrirGaleria={abrirGaleria}
-              carrito={carrito}
-              agregarAlCarrito={agregarAlCarrito}
+              // carrito={carrito}
+              // agregarAlCarrito={agregarAlCarrito}
             />
           }
+        />
+        <Route
+        path="/producto/:id"
+        element={<ProductoDetalle />}
         />
       </Routes>
       {mostrarGaleria && (
@@ -186,6 +191,7 @@ function App() {
           onClose={() => setMostrarGaleria(false)}
         />
       )}
+      
       <Footer />
       <ToastContainer />
     </>

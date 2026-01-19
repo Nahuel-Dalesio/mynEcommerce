@@ -1,0 +1,96 @@
+.productoDetalle {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
+}
+.imagenPrincipal {
+  width: 400px;
+  height: auto;
+  margin-right: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.imagenesSecundarias {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.imagenesSecundariasContenedor {
+  width: 100px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.productoInfo {
+  padding: 16px;
+}
+
+.talles {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 10px 0;
+}
+
+.talle-btn {
+  padding: 8px 14px;
+  border: 1px solid #333;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.talle-btn.activo {
+  background: #333;
+  color: white;
+}
+
+.talle-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btnDetalle {
+  font-size: x-large;
+  font-family: "Alegreya Sans SC", sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  background-color: black;
+  color: white;
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+  padding: 10px 60px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+.btnDetalle:hover {
+  opacity: 90%;
+  color: rgb(198, 169, 6);
+}
+.contador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.contador button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #333;
+  background: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.contador span {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.btnDetalle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

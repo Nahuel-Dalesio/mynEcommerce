@@ -6,6 +6,10 @@ export function useImagenesProducto() {
   const [error, setError] = useState(null);
 
   const cargarImagenes = async (idProducto) => {
+    if (!idProducto) {
+      setError("ID de producto inválido");
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -14,12 +18,14 @@ export function useImagenesProducto() {
         `http://localhost:3001/api/productos/imagenes/${idProducto}`
       );
 
-      if (!res.ok) throw new Error("Error al cargar imágenes");
+      if (!res.ok)
+        throw new Error(`Error HTTP ${res.status}: ${res.statusText}`);
 
       const data = await res.json();
-      setImagenes(data.map(img => img.src));
+      setImagenes(data);
     } catch (err) {
-      setError(err);
+      console.error("Error en cargarImagenes:", err); // Agregado para depurar
+      setError(err.message);
     } finally {
       setLoading(false);
     }

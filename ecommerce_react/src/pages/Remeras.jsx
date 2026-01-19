@@ -2,7 +2,7 @@ import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
 
-function Remeras({ agregarAlCarrito, carrito, abrirGaleria }) {
+function Remeras({abrirGaleria }) {
   const { productos, loading, error } = useProductos("Remeras");
 
   if (loading) return <p>Cargando Remeras...</p>;
@@ -18,8 +18,8 @@ function Remeras({ agregarAlCarrito, carrito, abrirGaleria }) {
           <ProductoCard 
             key={producto.idProducto}
             producto={producto}
-            carrito={carrito}
-            agregarAlCarrito={agregarAlCarrito}
+            // carrito={carrito}
+            // agregarAlCarrito={agregarAlCarrito}
             abrirGaleria={abrirGaleria}
           />
         ))}
