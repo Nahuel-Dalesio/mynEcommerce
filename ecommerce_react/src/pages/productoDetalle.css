@@ -47,6 +47,8 @@
 }
 
 .talle-btn:disabled {
+  background-color: white;
+  color: #333;
   opacity: 0.4;
   cursor: not-allowed;
 }

@@ -5,7 +5,7 @@ import "./productoDetalle.css";
 
 const TALLES = ["S", "M", "L", "XL", "XXL"];
 
-function ProductoDetalle() {
+function ProductoDetalle({ agregarAlCarrito, carrito }) {
   const { id } = useParams();
   const [producto, setProducto] = useState(null);
   const [error, setError] = useState(null);
@@ -32,8 +32,8 @@ function ProductoDetalle() {
     if (talleSeleccionado) {
       setCantidad(1);
     }
-  }, [talleSeleccionado]);
-  
+  }, [carrito, talleSeleccionado]);
+
   if (error) return <p>{error}</p>;
   if (!producto) return <p>Cargando...</p>;
 
@@ -42,11 +42,16 @@ function ProductoDetalle() {
   const obtenerTalle = (talle) =>
     producto.talles.find((t) => t.talle.trim().toUpperCase() === talle);
 
-  const talleActual = talleSeleccionado
-    ? obtenerTalle(talleSeleccionado)
-    : null;
-
-  const stockDisponible = talleActual?.stock ?? 0;
+  const stockDisponible = talleSeleccionado
+    ? obtenerTalle(talleSeleccionado).stock -
+      carrito
+        .filter(
+          (p) =>
+            p.idProducto === producto.idProducto &&
+            p.talle === talleSeleccionado,
+        )
+        .reduce((acc, p) => acc + p.cantidad, 0)
+    : 0;
 
   return (
     <div className="productoDetalle">
@@ -98,7 +103,17 @@ function ProductoDetalle() {
         <div className="talles">
           {TALLES.map((talle) => {
             const talleData = obtenerTalle(talle);
-            const sinStock = !talleData || talleData.stock === 0;
+            const stockDisponibleTalle = talleData
+              ? talleData.stock -
+                carrito
+                  .filter(
+                    (p) =>
+                      p.idProducto === producto.idProducto && p.talle === talle,
+                  )
+                  .reduce((acc, p) => acc + p.cantidad, 0)
+              : 0;
+
+            const sinStock = stockDisponibleTalle <= 0;
 
             return (
               <button
@@ -114,7 +129,7 @@ function ProductoDetalle() {
             );
           })}
         </div>
-        {talleSeleccionado && stockDisponible > 0 && (
+        {talleSeleccionado  && stockDisponible > 0 && (
           <div className="contador">
             <button onClick={() => setCantidad((c) => Math.max(1, c - 1))}>
               −
@@ -124,26 +139,31 @@ function ProductoDetalle() {
 
             <button
               onClick={() =>
-                setCantidad((c) => Math.min(stockDisponible, c + 1))
+                setCantidad((c) => (c < stockDisponible ? c + 1 : c))
               }
             >
               +
             </button>
           </div>
         )}
+
         <button
           className="btnDetalle"
           disabled={!talleSeleccionado}
           onClick={() => {
-            console.log({
-              idProducto: producto.idProducto,
-              nombre: producto.nombre,
-              talle: talleSeleccionado,
+            const talleData = obtenerTalle(talleSeleccionado);
+
+            agregarAlCarrito(
+              {
+                ...producto,
+                imagen: imagenPrincipal
+                  ? `http://localhost:3001${imagenPrincipal.src}`
+                  : null,
+              },
+              talleSeleccionado,
               cantidad,
-              precio: producto.enOferta
-                ? producto.precioOferta
-                : producto.precio,
-            });
+              talleData.stock,
+            );
           }}
         >
           Agregar al carrito
