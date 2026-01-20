@@ -23,6 +23,7 @@ function App() {
   const toggleCarrito = () => {
     setMostrarCarrito((prev) => !prev);
   };
+
   const [carrito, setCarrito] = useState(() => {
     const guardado = localStorage.getItem("carrito");
     return guardado ? JSON.parse(guardado) : [];
@@ -40,6 +41,9 @@ function App() {
         return [];
       }),
     );
+  };
+  const cerrarCarrito = () => {
+    setMostrarCarrito(false);
   };
   const agregarAlCarrito = (producto, talle, cantidad, stockTalle) => {
     setCarrito((prev) => {
@@ -73,22 +77,22 @@ function App() {
         hideProgressBar: true,
       });
       return [
-      ...prev,
-      {
-        idProducto: producto.idProducto,
-        nombre: producto.nombre,
-        precio: producto.precioOferta ?? producto.precio,
-        talle,
-        cantidad,
-        stock: stockTalle,
-        imagen: producto.imagenes.find((img) => img.esPrincipal === 1)?.src,
-      },
-    ];
-  });
-};
+        ...prev,
+        {
+          idProducto: producto.idProducto,
+          nombre: producto.nombre,
+          precio: producto.precioOferta ?? producto.precio,
+          talle,
+          cantidad,
+          stock: stockTalle,
+          imagen: producto.imagenes.find((img) => img.esPrincipal === 1)?.src,
+        },
+      ];
+    });
+  };
   const totalCarrito = carrito.reduce(
     (acc, prod) => acc + prod.precio * prod.cantidad,
-    0
+    0,
   );
   const comprar = () => {
     if (carrito.length === 0)
@@ -145,11 +149,12 @@ function App() {
         <IniciarSesionModal onClose={() => setMostrarModal(null)} />
       )} */}
       <Carrito
-      abierto={mostrarCarrito}
-      carrito={carrito}
-      eliminarDelCarrito={eliminarDelCarrito}
-      totalCarrito={totalCarrito}
-      comprar={comprar}
+        abierto={mostrarCarrito}
+        carrito={carrito}
+        eliminarDelCarrito={eliminarDelCarrito}
+        totalCarrito={totalCarrito}
+        comprar={comprar}
+        cerrarCarrito = {cerrarCarrito}
       />
       <Navbar />
       <Routes>
@@ -178,7 +183,7 @@ function App() {
           element={
             <Abrigos
               abrirGaleria={abrirGaleria}
-              
+
               // agregarAlCarrito={agregarAlCarrito}
             />
           }
@@ -195,7 +200,12 @@ function App() {
         />
         <Route
           path="/producto/:id"
-          element={<ProductoDetalle agregarAlCarrito={agregarAlCarrito} carrito={carrito} />}
+          element={
+            <ProductoDetalle
+              agregarAlCarrito={agregarAlCarrito}
+              carrito={carrito}
+            />
+          }
         />
       </Routes>
       {mostrarGaleria && (

@@ -22,6 +22,7 @@
   height: auto;
   border: 1px solid #ccc;
   border-radius: 4px;
+  cursor: pointer;
 }
 .productoInfo {
   padding: 16px;
@@ -86,6 +87,11 @@
   font-size: 18px;
 }
 
+.contador button:disabled{
+  opacity: 0.5 ;
+
+}
+
 .contador span {
   min-width: 20px;
   text-align: center;
@@ -95,4 +101,20 @@
 .btnDetalle:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.espacio{
+  padding-bottom: 12px;
+}
+.tprecioOferta{
+  font-weight: bold;
+  font-size: larger;
+
+}
+.precioOferta{
+  font-family:mora;
+  font-size: x-large;
+  
+}
+.precioTachado{
+  text-decoration: line-through;
 }
