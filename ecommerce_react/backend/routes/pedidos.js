@@ -1,6 +1,5 @@
-import express from "express";
-import conexion from "../conexion.js";
-
+import express from 'express';
+import conexion from '../conexion.js';
 const router = express.Router();
 // router.get("/", async (req, res) => {
 //   try {
@@ -16,11 +15,11 @@ const router = express.Router();
 //   }
 // });
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const { cliente, carrito, total } = req.body;
 
   if (!cliente || !carrito || !total) {
-    return res.status(400).json({ error: "Datos incompletos" });
+    return res.status(400).json({ error: 'Datos incompletos' });
   }
 
   try {
@@ -33,7 +32,7 @@ router.post("/", async (req, res) => {
     const [rows] = await conexion.query(
       `SELECT idCliente FROM cliente 
        WHERE nombre = ? AND apellido = ? AND telefono = ?`,
-      [nombre, apellido, telefono]
+      [nombre, apellido, telefono],
     );
 
     let clienteId;
@@ -46,16 +45,27 @@ router.post("/", async (req, res) => {
       const [clienteResult] = await conexion.query(
         `INSERT INTO cliente (nombre, apellido, telefono)
          VALUES (?, ?, ?)`,
-        [nombre, apellido, telefono]
+        [nombre, apellido, telefono],
       );
       clienteId = clienteResult.insertId;
     }
 
+    const [ultimo] = await conexion.query(
+      `SELECT MAX(numeroPedido) as maxNum FROM pedido`,
+    );
+
+    let numeroPedido = 1;
+
+    if (ultimo[0].maxNum) {
+      const incremento = Math.floor(Math.random() * 20) + 1;
+      numeroPedido = ultimo[0].maxNum + incremento;
+    }
+
     // 2️⃣ Guardar pedido
     const [pedidoResult] = await conexion.query(
-      `INSERT INTO pedido (idCliente, total, estado)
-       VALUES (?, ?, 'pendiente')`,
-      [clienteId, total]
+      `INSERT INTO pedido (idCliente, total, estado, numeroPedido )
+       VALUES (?, ?, 'pendiente', ?)`,
+      [clienteId, total, numeroPedido],
     );
 
     const pedidoId = pedidoResult.insertId;
@@ -66,15 +76,14 @@ router.post("/", async (req, res) => {
         `INSERT INTO detallePedido
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio]
+        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio],
       );
     }
 
-    res.json({ ok: true, pedidoId });
-
+    res.json({ ok: true, pedidoId: pedidoResult.insertId, numeroPedido });
   } catch (error) {
-    console.error("Error pedido:", error);
-    res.status(500).json({ error: "No se pudo guardar el pedido" });
+    console.error('Error pedido:', error);
+    res.status(500).json({ error: 'No se pudo guardar el pedido' });
   }
 });
 

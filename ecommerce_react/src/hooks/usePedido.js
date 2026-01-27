@@ -30,7 +30,8 @@ function usePedido() {
         throw new Error(data.error || "Error al guardar pedido");
       }
 
-      return data; // pedidoId
+      return {peidoId: data.pedidoId,
+        numeroPedido: data.numeroPedido}; // pedidoId
 
     } catch (err) {
 
