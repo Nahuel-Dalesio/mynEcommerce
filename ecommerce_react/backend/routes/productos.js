@@ -3,7 +3,11 @@ import conexion from "../conexion.js";
 
 const router = express.Router();
 
-function obtenerProductosPorCategoria(categoria, callback) {
+/* ===============================
+   Funciones reutilizables
+================================ */
+
+async function obtenerProductosPorCategoria(categoria) {
   const query = `
     SELECT 
       p.idProducto,
@@ -20,23 +24,12 @@ function obtenerProductosPorCategoria(categoria, callback) {
     WHERE p.categoria = ?
   `;
 
-  conexion.query(query, [categoria], callback);
+  const [rows] = await conexion.query(query, [categoria]);
+  return rows;
 }
 
-router.get("/categoria", (req, res) => {
-  const { categoria } = req.query;
 
-  if (!categoria) {
-    return res.status(400).json({ error: "categoria es obligatoria" });
-  }
-
-  obtenerProductosPorCategoria(categoria, (err, rows) => {
-    if (err) return res.status(500).json(err);
-    res.json(rows);
-  });
-});
-
-function obtenerProductosDestacados(callback) {
+async function obtenerProductosDestacados() {
   const query = `
     SELECT 
       p.idProducto,
@@ -53,17 +46,12 @@ function obtenerProductosDestacados(callback) {
     WHERE p.esDestacado = 1
   `;
 
-  conexion.query(query, callback);
+  const [rows] = await conexion.query(query);
+  return rows;
 }
 
-router.get("/", (_req, res) => {
-  obtenerProductosDestacados((err, rows) => {
-    if (err) return res.status(500).json(err);
-    res.json(rows);
-  });
-});
 
-function obtenerImagenesPorProducto(idProducto, callback) {
+async function obtenerImagenesPorProducto(idProducto) {
   const query = `
     SELECT src, esPrincipal
     FROM imagenesproducto
@@ -71,21 +59,12 @@ function obtenerImagenesPorProducto(idProducto, callback) {
     ORDER BY esPrincipal DESC
   `;
 
-  conexion.query(query, [idProducto], (err, results) => {
-    if (err) return callback(err);
-    callback(null, results);
-  });
+  const [rows] = await conexion.query(query, [idProducto]);
+  return rows;
 }
-router.get("/imagenes/:idProducto", (req, res) => {
-  const { idProducto } = req.params;
 
-  obtenerImagenesPorProducto(idProducto, (err, imagenes) => {
-    if (err) return res.status(500).json(err);
-    res.json(imagenes);
-  });
-});
 
-function obtenerProductoPorId(idProducto, callback) {
+async function obtenerProductoPorId(idProducto) {
   const query = `
     SELECT
       p.idProducto,
@@ -105,21 +84,82 @@ function obtenerProductoPorId(idProducto, callback) {
     WHERE p.idProducto = ?
   `;
 
-  conexion.query(query, [idProducto], callback);
+  const [rows] = await conexion.query(query, [idProducto]);
+  return rows;
 }
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
 
-  obtenerProductoPorId(id, (err, results) => {
-    if (err) {
-      console.error(err.sqlMessage);
-      return res.status(500).json({ error: "Error de base de datos" });
+
+
+
+
+
+/* ===============================
+   Rutas
+================================ */
+
+router.get("/categoria", async (req, res) => {
+  try {
+
+    const { categoria } = req.query;
+
+    if (!categoria) {
+      return res.status(400).json({
+        error: "categoria es obligatoria"
+      });
     }
 
-    if (!results || results.length === 0) {
-      return res.status(404).json({ error: "Producto no encontrado" });
+    const productos = await obtenerProductosPorCategoria(categoria);
+
+    res.json(productos);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
+  }
+});
+
+
+router.get("/", async (_req, res) => {
+  try {
+
+    const productos = await obtenerProductosDestacados();
+
+    res.json(productos);
+
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+
+router.get("/imagenes/:idProducto", async (req, res) => {
+  try {
+
+    const { idProducto } = req.params;
+
+    const imagenes = await obtenerImagenesPorProducto(idProducto);
+
+    res.json(imagenes);
+
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+
+router.get("/:id", async (req, res) => {
+  try {
+
+    const { id } = req.params;
+
+    const results = await obtenerProductoPorId(id);
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        error: "Producto no encontrado"
+      });
     }
-    
+
     const producto = {
       idProducto: results[0].idProducto,
       nombre: results[0].nombre,
@@ -129,7 +169,8 @@ router.get("/:id", (req, res) => {
       enOferta: results[0].enOferta,
       precioOferta: results[0].precioOferta,
       categoria: results[0].categoria,
-      talles: []
+      talles: [],
+      imagenes: []
     };
 
     results.forEach(row => {
@@ -140,14 +181,18 @@ router.get("/:id", (req, res) => {
       });
     });
 
-  obtenerImagenesPorProducto(id, (err, imagenes) => {
-      if (err) return res.status(500).json(err);
+    const imagenes = await obtenerImagenesPorProducto(id);
 
-      producto.imagenes = imagenes;
-      res.json(producto);
+    producto.imagenes = imagenes;
+
+    res.json(producto);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Error DB"
     });
-  });
+  }
 });
 
 export default router;
-

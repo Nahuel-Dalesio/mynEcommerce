@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import productosRoutes from "./routes/productos.js";
 import { fileURLToPath } from "url";
+import pedidosRoutes from "./routes/pedidos.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(
 
 // rutas API
 app.use("/api/productos", productosRoutes);
+app.use("/api/pedidos", pedidosRoutes);
 
 app.listen(3001, () => {
   console.log("Servidor corriendo en http://localhost:3001");

@@ -42,9 +42,9 @@ function Footer() {
           </ul>
         </div>
         <div>
-          <a href="https://wa.me" target="_blank"><LogoWhatsapp className="logoRedes"/></a>
-          <a href="https://www.facebook.com" target="_blank"><LogoFacebook className="logoRedes"/></a>
-          <a href="https://www.instagram.com" target="_blank"><LogoInstagram className="logoRedes"/></a>
+          <a href="https://wa.me/c/5491176194154" target="_blank"><LogoWhatsapp className="logoRedes"/></a>
+          <a href="https://www.facebook.com/MYNINDUMENTARIAONLINE?locale=es_LA" target="_blank"><LogoFacebook className="logoRedes"/></a>
+          <a href="https://www.instagram.com/mynindumentariaonline/" target="_blank"><LogoInstagram className="logoRedes"/></a>
         </div>
       </div>
 

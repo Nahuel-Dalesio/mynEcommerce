@@ -1,6 +1,6 @@
 import "./Header.css"
 
-function Header({ onCrearUsuario, onIniciarSesion, onAbrirCarrito }) {
+function Header({ onCrearUsuario, onIniciarSesion, onAbrirCarrito, toggleButtonRef }) {
   return (
     <header>
       <div className="barraInicio">
@@ -13,7 +13,7 @@ function Header({ onCrearUsuario, onIniciarSesion, onAbrirCarrito }) {
           Crear Usuario
         </button>
 
-        <button className="boton" onClick={onAbrirCarrito}>🛒</button>
+        <button className="boton" ref={toggleButtonRef} onClick={onAbrirCarrito}>🛒</button>
       </div>
     </header>
   );
