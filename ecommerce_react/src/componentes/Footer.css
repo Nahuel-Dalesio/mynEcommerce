@@ -57,3 +57,24 @@ img{
 .pad{
   padding: 4px;
 }
+.legalPadre{
+  display: flex;
+  justify-content: center;
+
+}
+.centrar{
+  text-align: center;
+  font-size: xx-small;
+  font-weight:lighter;
+  list-style: none;
+  width: 220px;
+  margin-bottom: 4px;
+}
+.centrar:hover{
+  color: var(--colorterciario);
+    text-decoration: underline;
+}
+.legal{
+  text-decoration: none;
+  color: var(--colorprimario);
+}

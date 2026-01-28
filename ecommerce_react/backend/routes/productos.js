@@ -75,11 +75,11 @@ async function obtenerProductoPorId(idProducto) {
       p.enOferta,
       p.precioOferta,
       p.categoria,
-      pd.idProductoTalle,
+      pd.idProductoStock,
       pd.talle,
       pd.stock
     FROM producto p
-    INNER JOIN productotalle pd 
+    INNER JOIN productostock pd 
       ON pd.idProduct = p.idProducto
     WHERE p.idProducto = ?
   `;
@@ -175,7 +175,7 @@ router.get("/:id", async (req, res) => {
 
     results.forEach(row => {
       producto.talles.push({
-        idProductoTalle: row.idProductoTalle,
+        idProductoTalle: row.idProductoStock,
         talle: row.talle,
         stock: row.stock
       });

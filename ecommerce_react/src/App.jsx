@@ -15,6 +15,13 @@ import GaleriaModal from './componentes/GaleriaModal.jsx';
 import Footer from './componentes/Footer.jsx';
 import ProductoDetalle from './pages/ProductoDetalle.jsx';
 import FormDatos from './pages/FormDatos.jsx';
+import AcercaDeMyn from './pages/AcercaDeMyn.jsx';
+import Contactanos from './pages/Contatanos.jsx';
+import Sugerencias from "./pages/Sugerencias";
+import Terminos from "./pages/Terminos";
+import Privacidad from "./pages/Privacidad";
+import ScrollToTop from "./componentes/ScrollToTop";
+
 
 function App() {
   const [imagenesGaleria, setImagenesGaleria] = useState([]);
@@ -114,6 +121,7 @@ function App() {
   };
   return (
     <>
+      
       <Header
         onCrearUsuario={() => setMostrarModal('crear')}
         onIniciarSesion={() => setMostrarModal('login')}
@@ -135,6 +143,7 @@ function App() {
         toggleButtonRef={toggleButtonRef}
       />
       <Navbar />
+      <ScrollToTop />
       <Routes>
         <Route
           path='/'
@@ -189,6 +198,12 @@ function App() {
           path='/checkout'
           element={<FormDatos limpiarCarrito={() => setCarrito([])} />}
         />
+        <Route path="/AcercaDeMyn" element={<AcercaDeMyn />} />
+        <Route path="/Contactanos" element={<Contactanos />} />
+        <Route path="/Sugerencias" element={<Sugerencias />} />
+        <Route path="/Terminos" element={<Terminos />} />
+        <Route path="/Privacidad" element={<Privacidad />} />
+
       </Routes>
       {mostrarGaleria && (
         <GaleriaModal

@@ -16,27 +16,25 @@ function FormDatos({ limpiarCarrito }) {
   });
 
   function enviarWhatsapp({ numeroPedido, cliente, carrito, total }) {
-    const telefono = '5491176194154'; // tu número de WhatsApp
+    const telefono = '5491176194154';
 
-    // Construir mensaje completo
-    let mensaje = `¡Hola! Quiero realizar un pedido.\r\n`;
+    let mensaje = '';
+    mensaje += '¡Hola! Quiero realizar un pedido\n\n';
+    mensaje += 'PRODUCTOS:\n';
 
-    mensaje += `🛒 Productos:\r\n`;
-    carrito.forEach((p, i) => {
-      mensaje += `${i + 1}. ${p.nombre} - Talle: ${p.talle} - Cantidad: ${p.cantidad} - $${p.precio}\n`;
+    carrito.forEach((prod, i) => {
+      mensaje += `${i + 1}.  ${prod.nombre} - ${prod.cantidad}u - Talle: ${prod.talle} - $${prod.precio}\n`;
     });
 
-    mensaje += `💵 Total: $${total}\r\n`;
-    mensaje += `📦 Número de pedido: #${numeroPedido}`;
+    mensaje += '\nTOTAL: $' + total + '\n';
+    mensaje += 'PEDIDO: #' + numeroPedido + '\n\n';
+    mensaje += 'DATOS DEL CLIENTE:\n\n';
+    mensaje += 'Nombre: ' + cliente.nombre + '\n';
+    mensaje += 'Apellido: ' + cliente.apellido + '\n';
+    mensaje += 'Teléfono: ' + cliente.telefono;
 
-    mensaje += `👤 Datos del cliente:\r\n`;
-
-    mensaje += `Nombre: ${cliente.nombre}\r\n`;
-    mensaje += `Apellido: ${cliente.apellido}\r\n`;
-    mensaje += `Teléfono: ${cliente.telefono}\r\n`;
-
-    // Abrir WhatsApp
     const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+
     window.open(url, '_blank');
   }
 

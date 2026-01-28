@@ -3,17 +3,18 @@ import { useState } from "react";
 function CrearUsuarioModal({ onClose }) {
   const [nombre, setNombre] = useState("");
   const [password, setPassword] = useState("");
+  const [telefono, setTelefono] = useState("");
 
   const handleCrear = () => {
     // Validación simple
-    if (!nombre || !password) {
+    if (!nombre || !password || !telefono) {
       alert("Completa todos los campos");
       return;
     }
 
     // Simulación de guardado (después va API)
     const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    usuarios.push({ nombre, password });
+    usuarios.push({ nombre, password, telefono });
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
     // Cerrar modal
@@ -43,6 +44,14 @@ function CrearUsuarioModal({ onClose }) {
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <input
+          className="input"
+          type="text"
+          placeholder="Telefono"
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
         />
 
         <button className="btnCrear" onClick={handleCrear}>
