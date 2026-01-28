@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import './formDatos.css';
 import usePedido from '../hooks/usePedido.js';
 
-function FormDatos({limpiarCarrito}) {
+function FormDatos({ limpiarCarrito }) {
   const { guardarPedido, error, loading } = usePedido();
   const navigate = useNavigate();
 
@@ -29,14 +29,11 @@ function FormDatos({limpiarCarrito}) {
     mensaje += `💵 Total: $${total}\r\n`;
     mensaje += `📦 Número de pedido: #${numeroPedido}`;
 
+    mensaje += `👤 Datos del cliente:\r\n`;
 
-    mensaje += `👤 Datos del cliente:\r\n`
-    
     mensaje += `Nombre: ${cliente.nombre}\r\n`;
     mensaje += `Apellido: ${cliente.apellido}\r\n`;
     mensaje += `Teléfono: ${cliente.telefono}\r\n`;
-
-    
 
     // Abrir WhatsApp
     const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
@@ -54,6 +51,21 @@ function FormDatos({limpiarCarrito}) {
 
     if (!formData.nombre || !formData.apellido || !formData.telefono) {
       Swal.fire({ title: 'Completá todos los campos', icon: 'warning' });
+      return;
+    }
+
+    const telefonoLimpio = formData.telefono.replace(/\D/g, '');
+
+    // Validar formato
+    if (telefonoLimpio.length < 10 || telefonoLimpio.length > 13) {
+      Swal.fire({
+        title: 'Teléfono inválido',
+        text: 'Forma correcta:\n11 2345 6789',
+        icon: 'error',
+        customClass: {
+          popup: 'swal-pre',
+        },
+      });
       return;
     }
 
@@ -94,6 +106,7 @@ function FormDatos({limpiarCarrito}) {
     // ✅ Limpiar carrito si querés
     limpiarCarrito();
     localStorage.removeItem('carrito');
+    localStorage.removeItem('cliente');
 
     // ✅ Volver a inicio
     navigate('/');
@@ -109,6 +122,7 @@ function FormDatos({limpiarCarrito}) {
           type='text'
           name='nombre'
           value={formData.nombre}
+          placeholder='Julian'
           onChange={handleChange}
           required
         />
@@ -118,6 +132,7 @@ function FormDatos({limpiarCarrito}) {
           type='text'
           name='apellido'
           value={formData.apellido}
+          placeholder='Rodriguez'
           onChange={handleChange}
           required
         />
@@ -128,6 +143,7 @@ function FormDatos({limpiarCarrito}) {
           name='telefono'
           value={formData.telefono}
           onChange={handleChange}
+          placeholder='11 2345 6789'
           required
         />
 

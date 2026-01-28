@@ -26,7 +26,13 @@ router.post('/', async (req, res) => {
     // Normalizar los datos para evitar problemas de mayúsculas/espacios
     const nombre = cliente.nombre.trim();
     const apellido = cliente.apellido.trim();
-    const telefono = cliente.telefono.trim();
+    let telefono = cliente.telefono.replace(/\D/g, '');
+
+    if (telefono.length < 10 || telefono.length > 15) {
+      return res.status(400).json({
+        error: 'Número de teléfono inválido',
+      });
+    }
 
     // 1️⃣ Verificar si ya existe un cliente con todos los datos exactos
     const [rows] = await conexion.query(
