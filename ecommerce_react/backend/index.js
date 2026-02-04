@@ -4,6 +4,10 @@ import path from "path";
 import productosRoutes from "./routes/productos.js";
 import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 
 const app = express();
 
@@ -23,6 +27,8 @@ app.use(
 app.use("/api/productos", productosRoutes);
 app.use("/api/pedidos", pedidosRoutes);
 
-app.listen(3001, () => {
-  console.log("Servidor corriendo en http://localhost:3001");
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
