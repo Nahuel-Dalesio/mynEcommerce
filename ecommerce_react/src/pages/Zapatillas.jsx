@@ -1,25 +1,25 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
-function Camperas({ agregarAlCarrito, carrito, abrirGaleria }) {
-  const { productos, loading, error } = useProductos("Camperas");
+function Zapatillas({ abrirGaleria }) {
+  const { productos, loading, error } = useProductos("Zapatillas");
 
-  if (loading) return <p>Cargando Camperas...</p>;
+  if (loading) return <p>Cargando zapatillas...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      <h2>Camperas</h2>
+      
 
-      {productos.length === 0 && <p>No hay Camperas</p>}
+      {productos.length === 0 && <p>No hay zapatillas</p>}
 
       <div id="productos">
         {productos.map(producto => (
           <ProductoCard
             key={producto.idProducto}
             producto={producto}
-            carrito={carrito}
-            agregarAlCarrito={agregarAlCarrito}
+            // carrito={carrito}
+            // agregarAlCarrito={agregarAlCarrito}
             abrirGaleria={abrirGaleria}
           />
         ))}
@@ -28,4 +28,4 @@ function Camperas({ agregarAlCarrito, carrito, abrirGaleria }) {
   );
 }
 
-export default Camperas;
+export default Zapatillas;

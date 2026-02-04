@@ -1,0 +1,80 @@
+img{
+  width: 150px;
+  margin: 10px;
+  padding: 6px;
+  border-radius: 20px;
+}
+.footer-top {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 150px;
+    padding: 10px;
+    background-color: var(--colorsecundario);
+}
+.logo{
+  list-style: none;
+}
+.logo a{
+    text-decoration: none;
+    color: var(--colorprimario);
+}
+.logo a:hover{
+    color: var(--colorterciario);
+    text-decoration: underline;
+}
+
+.logoRedes {
+  width: 48px;
+  height: 48px;
+  margin: 6px;
+  fill: currentColor;
+}
+.footer-bottom {
+    text-align: center;
+    padding: 12px;
+    background-color: var(--colorterciario);
+    color: var(--colorsecundario);
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+.footer-brand{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+.font{
+  font-family: 'Arial', sans-serif;
+  padding: 4px;
+  font-weight: bold;
+  font-size: small;
+
+}
+.footer-contact{
+  text-align: center;
+}
+.pad{
+  padding: 4px;
+}
+.legalPadre{
+  display: flex;
+  justify-content: center;
+
+}
+.centrar{
+  text-align: center;
+  font-size: xx-small;
+  font-weight:lighter;
+  list-style: none;
+  width: 220px;
+  margin-bottom: 4px;
+}
+.centrar:hover{
+  color: var(--colorterciario);
+    text-decoration: underline;
+}
+.legal{
+  text-decoration: none;
+  color: var(--colorprimario);
+}

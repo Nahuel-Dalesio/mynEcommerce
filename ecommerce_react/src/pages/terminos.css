@@ -1,0 +1,65 @@
+.terminos-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  line-height: 1.7;
+}
+
+.terminos-container h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.terminos-container .fecha {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.terminos-container section {
+  margin-bottom: 25px;
+}
+
+.terminos-container h2 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  border-left: 4px solid #000;
+  padding-left: 10px;
+}
+
+.terminos-container p {
+  margin-bottom: 8px;
+}
+
+.terminos-container hr {
+  margin: 30px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.terminos-container .firma {
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+  .terminos-container {
+    margin: 20px 10px;
+    padding: 15px;
+  }
+
+  .terminos-container h1 {
+    font-size: 1.6rem;
+  }
+
+  .terminos-container h2 {
+    font-size: 1.05rem;
+  }
+}

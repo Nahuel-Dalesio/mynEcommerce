@@ -11,7 +11,7 @@ export function useProductos(categoria) {
 
     let url = "http://localhost:3001/api/productos";
     if (categoria) {
-      url += `?categoria=${categoria}`;
+      url = `http://localhost:3001/api/productos/categoria?categoria=${categoria}`;
     }
 
     fetch(url)

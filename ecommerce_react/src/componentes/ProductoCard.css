@@ -22,7 +22,7 @@
   justify-content: center;
   flex-wrap: wrap;
 }
-.agregar-carrito {
+.btnDetalle {
   font-size: x-large;
   font-family: "Alegreya Sans SC", sans-serif;
   font-weight: bold;
@@ -36,7 +36,7 @@
   cursor: pointer;
   border-radius: 20px;
 }
-.agregar-carrito:hover {
+.btnDetalle:hover {
   opacity: 90%;
   color: rgb(198, 169, 6);
 }

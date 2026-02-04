@@ -1,21 +1,21 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
 
+function Home({ abrirGaleria }) {
+  const { productos, loading, error } = useProductos();
 
-function Remeras({abrirGaleria }) {
-  const { productos, loading, error } = useProductos("Remeras");
-
-  if (loading) return <p>Cargando Remeras...</p>;
+  if (loading) return <p>Cargando Home...</p>;
   if (error) return <p>{error}</p>;
 
   return (
     <div>
-      {productos.length === 0 && <p>No hay Remeras</p>}
-      <h5>Remeras disponibles</h5>
+      <h2>Home</h2>
+
+      {productos.length === 0 && <p>No hay productos</p>}
 
       <div id="productos">
-        {productos.map((producto) => (
-          <ProductoCard 
+        {productos.map(producto => (
+          <ProductoCard
             key={producto.idProducto}
             producto={producto}
             // carrito={carrito}
@@ -28,4 +28,4 @@ function Remeras({abrirGaleria }) {
   );
 }
 
-export default Remeras;
+export default Home;
