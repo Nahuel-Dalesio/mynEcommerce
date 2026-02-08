@@ -68,7 +68,6 @@ const createTables = async () => {
     `);
 
     console.log('✅ Todas las tablas se crearon correctamente');
-    process.exit(0);
 
   } catch (err) {
     console.error('❌ Error creando tablas:', err);
@@ -76,4 +75,4 @@ const createTables = async () => {
   }
 };
 
-createTables();
+export default createTables;
