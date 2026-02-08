@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "initdb": "node initDb.js"
+    "initdb": "node initdb.js"
   },
   "engines": {
     "node": "18.x"
