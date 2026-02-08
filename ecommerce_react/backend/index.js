@@ -4,7 +4,7 @@ import path from "path";
 import productosRoutes from "./routes/productos.js";
 import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use(
   "/productos",
-  express.static(path.join(__dirname, "../public/productos"))
+  express.static(path.join(__dirname, "../frontend/public/productos")),
 );
 
 // rutas API
