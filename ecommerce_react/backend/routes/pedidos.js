@@ -1,19 +1,6 @@
 import express from 'express';
-import conexion from '../conexion.js';
+import conexion from '../conexion.js'; // Esto debe exportar un Pool de pg
 const router = express.Router();
-// router.get("/", async (req, res) => {
-//   try {
-//     const [pedidos] = await conexion.query(
-//       `SELECT p.idPedido, c.nombre, c.apellido, c.telefono, p.total, p.estado
-//        FROM pedido p
-//        JOIN cliente c ON p.idCliente = c.idCliente`
-//     );
-//     res.json(pedidos);
-//   } catch (error) {
-//     console.error("Error al obtener pedidos:", error);
-//     res.status(500).json({ error: "No se pudieron obtener los pedidos" });
-//   }
-// });
 
 router.post('/', async (req, res) => {
   const { cliente, carrito, total } = req.body;
@@ -23,41 +10,41 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // Normalizar los datos para evitar problemas de mayúsculas/espacios
+    // Normalizar los datos
     const nombre = cliente.nombre.trim();
     const apellido = cliente.apellido.trim();
     let telefono = cliente.telefono.replace(/\D/g, '');
 
     if (telefono.length < 10 || telefono.length > 15) {
-      return res.status(400).json({
-        error: 'Número de teléfono inválido',
-      });
+      return res.status(400).json({ error: 'Número de teléfono inválido' });
     }
 
-    // 1️⃣ Verificar si ya existe un cliente con todos los datos exactos
-    const [rows] = await conexion.query(
-      `SELECT idCliente FROM cliente 
-       WHERE nombre = ? AND apellido = ? AND telefono = ?`,
-      [nombre, apellido, telefono],
+    // 1️⃣ Verificar si ya existe un cliente
+    const { rows: clientes } = await conexion.query(
+      `SELECT "idCliente" FROM cliente 
+       WHERE nombre = $1 AND apellido = $2 AND telefono = $3`,
+      [nombre, apellido, telefono]
     );
 
     let clienteId;
 
-    if (rows.length > 0) {
-      // Cliente ya existe, usamos su ID
-      clienteId = rows[0].idCliente;
+    if (clientes.length > 0) {
+      // Cliente ya existe
+      clienteId = clientes[0].idCliente;
     } else {
-      // Cliente no existe, insertamos uno nuevo
-      const [clienteResult] = await conexion.query(
+      // Insertar nuevo cliente y obtener id
+      const { rows: nuevoCliente } = await conexion.query(
         `INSERT INTO cliente (nombre, apellido, telefono)
-         VALUES (?, ?, ?)`,
-        [nombre, apellido, telefono],
+         VALUES ($1, $2, $3)
+         RETURNING "idCliente"`,
+        [nombre, apellido, telefono]
       );
-      clienteId = clienteResult.insertId;
+      clienteId = nuevoCliente[0].idCliente;
     }
 
-    const [ultimo] = await conexion.query(
-      `SELECT MAX(numeroPedido) as maxNum FROM pedido`,
+    // 2️⃣ Obtener último número de pedido
+    const { rows: ultimo } = await conexion.query(
+      `SELECT MAX("numeroPedido") as "maxNum" FROM pedido`
     );
 
     let numeroPedido = 1;
@@ -67,26 +54,27 @@ router.post('/', async (req, res) => {
       numeroPedido = ultimo[0].maxNum + incremento;
     }
 
-    // 2️⃣ Guardar pedido
-    const [pedidoResult] = await conexion.query(
-      `INSERT INTO pedido (idCliente, total, estado, numeroPedido )
-       VALUES (?, ?, 'pendiente', ?)`,
-      [clienteId, total, numeroPedido],
+    // 3️⃣ Guardar pedido y obtener id
+    const { rows: pedidoRows } = await conexion.query(
+      `INSERT INTO pedido (idCliente, total, estado, "numeroPedido")
+       VALUES ($1, $2, 'pendiente', $3)
+       RETURNING "idPedido"`,
+      [clienteId, total, numeroPedido]
     );
 
-    const pedidoId = pedidoResult.insertId;
+    const pedidoId = pedidoRows[0].idPedido;
 
-    // 3️⃣ Guardar detalle
+    // 4️⃣ Guardar detalle del pedido
     for (const p of carrito) {
       await conexion.query(
-        `INSERT INTO detallePedido
+        `INSERT INTO "detallePedido"
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio],
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio]
       );
     }
 
-    res.json({ ok: true, pedidoId: pedidoResult.insertId, numeroPedido });
+    res.json({ ok: true, pedidoId, numeroPedido });
   } catch (error) {
     console.error('Error pedido:', error);
     res.status(500).json({ error: 'No se pudo guardar el pedido' });
