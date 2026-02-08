@@ -1,9 +1,0 @@
-{
-  "build": {
-    "builder": "NIXPACKS",
-    "root": "backend"
-  },
-  "deploy": {
-    "root": "backend"
-  }
-}

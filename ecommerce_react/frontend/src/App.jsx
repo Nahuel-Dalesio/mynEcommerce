@@ -21,6 +21,7 @@ import Sugerencias from "./pages/Sugerencias";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import ScrollToTop from "./componentes/ScrollToTop";
+import { BASE_URL } from "../config";
 
 
 function App() {
@@ -110,7 +111,7 @@ function App() {
     } else {
       // pedirlas al backend
       const res = await fetch(
-        `http://localhost:3001/api/productos/imagenes/${producto.idProducto}`,
+        `${BASE_URL}/api/productos/imagenes/${producto.idProducto}`,
       );
       const data = await res.json();
 

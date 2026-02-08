@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BASE_URL } from "../config";
 
 function usePedido() {
 
@@ -12,7 +13,7 @@ function usePedido() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch("http://localhost:3001/api/pedidos", {
+      const res = await fetch(`${BASE_URL}/api/pedidos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

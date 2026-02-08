@@ -1,5 +1,6 @@
 // hooks/useProductos.js
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../config";
 
 export function useProductos(categoria) {
   const [productos, setProductos] = useState([]);
@@ -9,9 +10,9 @@ export function useProductos(categoria) {
   useEffect(() => {
     setLoading(true);
 
-    let url = "http://localhost:3001/api/productos";
+    let url = `${BASE_URL}/api/productos`;
     if (categoria) {
-      url = `http://localhost:3001/api/productos/categoria?categoria=${categoria}`;
+      url = `${BASE_URL}/api/productos/categoria?categoria=${categoria}`;
     }
 
     fetch(url)

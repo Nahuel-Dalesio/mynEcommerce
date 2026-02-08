@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BASE_URL } from "../config";
 
 export function useImagenesProducto() {
   const [imagenes, setImagenes] = useState([]);
@@ -15,7 +16,7 @@ export function useImagenesProducto() {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/productos/imagenes/${idProducto}`
+        `${BASE_URL}/api/productos/imagenes/${idProducto}`
       );
 
       if (!res.ok)
