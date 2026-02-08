@@ -5,7 +5,7 @@ import productosRoutes from "./routes/productos.js";
 import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
 import dotenv from "dotenv";
-import createTables from './initdb.js';
+import createTables from './init.js';
 
 await createTables();
 
