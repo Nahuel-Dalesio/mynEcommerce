@@ -1,4 +1,3 @@
-// hooks/useProductos.js
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../config";
 
@@ -9,6 +8,7 @@ export function useProductos(categoria) {
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
 
     let url = `${BASE_URL}/api/productos`;
     if (categoria) {
@@ -17,8 +17,13 @@ export function useProductos(categoria) {
 
     fetch(url)
       .then(res => res.json())
-      .then(data => setProductos(data))
-      .catch(err => setError(err.message))
+      .then(data => {
+        setProductos(Array.isArray(data) ? data : []);
+      })
+      .catch(err => {
+        setError(err.message || "Error al cargar productos");
+        setProductos([]);
+      })
       .finally(() => setLoading(false));
   }, [categoria]);
 
