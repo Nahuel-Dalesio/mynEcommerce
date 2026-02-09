@@ -3,6 +3,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "start": "node ecommerce_react/backend/index.js"
+    "start": "node backend/index.js"
   }
 }
