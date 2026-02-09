@@ -1,22 +1,17 @@
-import pkg from "pg";
-import dotenv from 'dotenv';
+import mysql from "mysql2/promise";
 
-const { Pool } = pkg;
-
-dotenv.config();
-
-const conexion = new Pool ({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT) || 3306,
+  const pool = await mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
 
-console.log('Pool PostgreSQL creado');
+console.log("Pool MySQL listo");
 
-export default conexion;
+export default pool;

@@ -1,50 +1,54 @@
-import express from 'express';
-import conexion from '../conexion.js'; // Esto debe exportar un Pool de pg
+import express from "express";
+import { pool } from "../conexion.js";
+
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const { cliente, carrito, total } = req.body;
 
   if (!cliente || !carrito || !total) {
-    return res.status(400).json({ error: 'Datos incompletos' });
+    return res.status(400).json({ error: "Datos incompletos" });
   }
 
+  const conn = await pool.getConnection();
+
   try {
-    // Normalizar los datos
+    await conn.beginTransaction();
+
+    // Normalizar datos
     const nombre = cliente.nombre.trim();
     const apellido = cliente.apellido.trim();
-    let telefono = cliente.telefono.replace(/\D/g, '');
+    let telefono = cliente.telefono.replace(/\D/g, "");
 
     if (telefono.length < 10 || telefono.length > 15) {
-      return res.status(400).json({ error: 'Número de teléfono inválido' });
+      return res.status(400).json({ error: "Número inválido" });
     }
 
-    // 1️⃣ Verificar si ya existe un cliente
-    const { rows: clientes } = await conexion.query(
-      `SELECT "idCliente" FROM cliente 
-       WHERE nombre = $1 AND apellido = $2 AND telefono = $3`,
+    // 1️⃣ Buscar cliente
+    const [clientes] = await conn.query(
+      `SELECT idCliente FROM cliente
+       WHERE nombre = ? AND apellido = ? AND telefono = ?`,
       [nombre, apellido, telefono]
     );
 
     let clienteId;
 
     if (clientes.length > 0) {
-      // Cliente ya existe
       clienteId = clientes[0].idCliente;
     } else {
-      // Insertar nuevo cliente y obtener id
-      const { rows: nuevoCliente } = await conexion.query(
+      // Insertar cliente
+      const [result] = await conn.query(
         `INSERT INTO cliente (nombre, apellido, telefono)
-         VALUES ($1, $2, $3)
-         RETURNING "idCliente"`,
+         VALUES (?, ?, ?)`,
         [nombre, apellido, telefono]
       );
-      clienteId = nuevoCliente[0].idCliente;
+
+      clienteId = result.insertId;
     }
 
-    // 2️⃣ Obtener último número de pedido
-    const { rows: ultimo } = await conexion.query(
-      `SELECT MAX("numeroPedido") as "maxNum" FROM pedido`
+    // 2️⃣ Obtener último pedido
+    const [ultimo] = await conn.query(
+      `SELECT MAX(numeroPedido) AS maxNum FROM pedido`
     );
 
     let numeroPedido = 1;
@@ -54,31 +58,49 @@ router.post('/', async (req, res) => {
       numeroPedido = ultimo[0].maxNum + incremento;
     }
 
-    // 3️⃣ Guardar pedido y obtener id
-    const { rows: pedidoRows } = await conexion.query(
-      `INSERT INTO pedido (idCliente, total, estado, "numeroPedido")
-       VALUES ($1, $2, 'pendiente', $3)
-       RETURNING "idPedido"`,
+    // 3️⃣ Insertar pedido
+    const [pedidoResult] = await conn.query(
+      `INSERT INTO pedido (idCliente, total, estado, numeroPedido)
+       VALUES (?, ?, 'pendiente', ?)`,
       [clienteId, total, numeroPedido]
     );
 
-    const pedidoId = pedidoRows[0].idPedido;
+    const pedidoId = pedidoResult.insertId;
 
-    // 4️⃣ Guardar detalle del pedido
+    // 4️⃣ Detalle pedido
     for (const p of carrito) {
-      await conexion.query(
-        `INSERT INTO "detallePedido"
+      await conn.query(
+        `INSERT INTO detallePedido
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio]
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          pedidoId,
+          p.idProducto,
+          p.nombre,
+          p.talle,
+          p.cantidad,
+          p.precio,
+        ]
       );
     }
 
+    await conn.commit();
+
     res.json({ ok: true, pedidoId, numeroPedido });
+
   } catch (error) {
-    console.error('Error pedido:', error);
-    res.status(500).json({ error: 'No se pudo guardar el pedido' });
+    await conn.rollback();
+
+    console.error("Error pedido:", error);
+
+    res.status(500).json({
+      error: "No se pudo guardar el pedido",
+    });
+
+  } finally {
+    conn.release();
   }
 });
 
 export default router;
+
