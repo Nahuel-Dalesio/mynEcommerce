@@ -21,7 +21,7 @@ import Sugerencias from "./pages/Sugerencias";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
 import ScrollToTop from "./componentes/ScrollToTop";
-import { BASE_URL } from "../config";
+import { BASE_URL } from "./config";
 
 
 function App() {
