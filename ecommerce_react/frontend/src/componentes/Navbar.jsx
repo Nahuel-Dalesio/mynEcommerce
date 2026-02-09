@@ -7,7 +7,7 @@ function Navbar() {
       <li className="logo deco">
         <NavLink to="/" end>
           <img
-            src="../public/logoMyn.jpg"
+            src="logoMyn.jpg"
             alt="Logo"
           />
         </NavLink>
