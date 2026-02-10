@@ -21,7 +21,7 @@ async function obtenerProductosPorCategoria(categoria) {
     LEFT JOIN imagenesproducto i 
       ON i.idProducto = p.idProducto 
       AND i.esPrincipal = 1
-    WHERE p.categoria = ?
+    WHERE LOWER(p.categoria) = LOWER(?)
   `;
 
   const [rows] = await pool.query(query, [categoria]);
