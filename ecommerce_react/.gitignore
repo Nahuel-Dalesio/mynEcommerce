@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+/frontend/.env
+.env.*.local
 
 # Editor directories and files
 backend/conexion.js
