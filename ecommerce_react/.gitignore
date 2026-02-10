@@ -13,6 +13,7 @@ dist-ssr
 *.local
 /frontend/.env
 .env.*.local
+.env
 
 # Editor directories and files
 backend/conexion.js
