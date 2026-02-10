@@ -100,7 +100,7 @@ router.get("/categoria", async (req, res) => {
     const productos = await obtenerProductosPorCategoria(categoria);
     res.json(productos);
   } catch (error) {
-    console.error(error);
+    console.error("Error al obtener productos por categoría:", error);
     res.status(500).json({ error: "Error DB" });
   }
 });
