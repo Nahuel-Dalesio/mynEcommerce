@@ -1,5 +1,6 @@
 import fs from "fs";
 import pool from "./conexion.js";
+
 async function initDb() {
   try {
     // Leer el archivo SQL completo
