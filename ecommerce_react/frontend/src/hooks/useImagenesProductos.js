@@ -18,7 +18,7 @@ export function useImagenesProducto() {
       const res = await fetch(
         `${BASE_URL}/api/productos/imagenes/${idProducto}`
       );
-
+      console.log("Respuesta de la API:", res); // Agregado para depurar
       if (!res.ok)
         throw new Error(`Error HTTP ${res.status}: ${res.statusText}`);
 
