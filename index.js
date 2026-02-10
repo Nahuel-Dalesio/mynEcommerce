@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
 import dotenv from "dotenv";
 
-
 dotenv.config();
 
 const app = express();

@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
     const [clientes] = await conn.query(
       `SELECT idCliente FROM cliente
        WHERE nombre = ? AND apellido = ? AND telefono = ?`,
-      [nombre, apellido, telefono]
+      [nombre, apellido, telefono],
     );
 
     let clienteId;
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
       const [result] = await conn.query(
         `INSERT INTO cliente (nombre, apellido, telefono)
          VALUES (?, ?, ?)`,
-        [nombre, apellido, telefono]
+        [nombre, apellido, telefono],
       );
 
       clienteId = result.insertId;
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
 
     // 2️⃣ Obtener último pedido
     const [ultimo] = await conn.query(
-      `SELECT MAX(numeroPedido) AS maxNum FROM pedido`
+      `SELECT MAX(numeroPedido) AS maxNum FROM pedido`,
     );
 
     let numeroPedido = 1;
@@ -62,7 +62,7 @@ router.post("/", async (req, res) => {
     const [pedidoResult] = await conn.query(
       `INSERT INTO pedido (idCliente, total, estado, numeroPedido)
        VALUES (?, ?, 'pendiente', ?)`,
-      [clienteId, total, numeroPedido]
+      [clienteId, total, numeroPedido],
     );
 
     const pedidoId = pedidoResult.insertId;
@@ -73,21 +73,13 @@ router.post("/", async (req, res) => {
         `INSERT INTO detallePedido
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-          pedidoId,
-          p.idProducto,
-          p.nombre,
-          p.talle,
-          p.cantidad,
-          p.precio,
-        ]
+        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio],
       );
     }
 
     await conn.commit();
 
     res.json({ ok: true, pedidoId, numeroPedido });
-
   } catch (error) {
     await conn.rollback();
 
@@ -96,11 +88,9 @@ router.post("/", async (req, res) => {
     res.status(500).json({
       error: "No se pudo guardar el pedido",
     });
-
   } finally {
     conn.release();
   }
 });
 
 export default router;
-

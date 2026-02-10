@@ -99,7 +99,6 @@ router.get("/categoria", async (req, res) => {
 
     const productos = await obtenerProductosPorCategoria(categoria);
     res.json(productos);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error DB" });
@@ -110,7 +109,6 @@ router.get("/", async (_req, res) => {
   try {
     const productos = await obtenerProductosDestacados();
     res.json(productos);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error DB" });
@@ -123,7 +121,6 @@ router.get("/imagenes/:idProducto", async (req, res) => {
 
     const imagenes = await obtenerImagenesPorProducto(idProducto);
     res.json(imagenes);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error DB" });
@@ -150,14 +147,14 @@ router.get("/:id", async (req, res) => {
       precioOferta: results[0].precioOferta,
       categoria: results[0].categoria,
       talles: [],
-      imagenes: []
+      imagenes: [],
     };
 
-    results.forEach(row => {
+    results.forEach((row) => {
       producto.talles.push({
         idProductoTalle: row.idProductoStock,
         talle: row.talle,
-        stock: row.stock
+        stock: row.stock,
       });
     });
 
@@ -165,7 +162,6 @@ router.get("/:id", async (req, res) => {
     producto.imagenes = imagenes;
 
     res.json(producto);
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error DB" });
