@@ -6,12 +6,13 @@ export function useProductos(categoria) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   console.log("API:", import.meta.env.VITE_API_URL);
-  
+
   useEffect(() => {
     setLoading(true);
     setError(null);
 
     let url = `${BASE_URL}/api/productos`;
+    console.log("URL:", url);
     if (categoria) {
       url = `${BASE_URL}/api/productos/categoria?categoria=${categoria}`;
     }
