@@ -114,6 +114,7 @@ function App() {
         `${BASE_URL}/api/productos/imagenes/${producto.idProducto}`,
       );
       const data = await res.json();
+      console.log("Imagenes backend:", data);
 
       setImagenesGaleria(data.map((img) => img.src));
     }
