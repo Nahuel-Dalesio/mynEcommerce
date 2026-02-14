@@ -67,7 +67,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
           <img
             key={index}
             className="imagenesSecundariasContenedor"
-            src={`${BASE_URL}${img.src}`}
+            src={`${img.src}`}
             alt={producto.nombre}
             onClick={() => setImagenPrincipal(img)}
           />
