@@ -72,7 +72,7 @@ router.post("/", async (req, res) => {
     // 4️⃣ Detalle pedido
     for (const p of carrito) {
       await conn.query(
-        `INSERT INTO detallePedido
+        `INSERT INTO detallepedido
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
          VALUES (?, ?, ?, ?, ?, ?)`,
         [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, Number(p.precio)],
