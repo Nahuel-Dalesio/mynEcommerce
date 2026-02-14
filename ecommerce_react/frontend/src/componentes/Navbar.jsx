@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function Navbar() {
   return (
-    <ul className="barra">
+    <ul className="barra w-full">
       <li className="logo deco">
         <NavLink to="/" end>
           <img
