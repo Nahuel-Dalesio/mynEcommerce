@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useImagenesProducto } from "../hooks/useImagenesProductos.js";
 import "./productoDetalle.css";
+import { BASE_URL } from "../config";
 
 const TALLES = ["S", "M", "L", "XL", "XXL"];
 
@@ -18,7 +19,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
   const [imagenPrincipal, setImagenPrincipal] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/productos/${id}`)
+    fetch(`${BASE_URL}/api/productos/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Error de servidor");
         return res.json();
@@ -66,7 +67,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
           <img
             key={index}
             className="imagenesSecundariasContenedor"
-            src={`http://localhost:3001${img.src}`}
+            src={`${BASE_URL}${img.src}`}
             alt={producto.nombre}
             onClick={() => setImagenPrincipal(img)}
           />
@@ -78,7 +79,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
         {imagenPrincipal ? (
           <img
             className="imagenPrincipal"
-            src={`http://localhost:3001${imagenPrincipal.src}`}
+            src={`${BASE_URL}${imagenPrincipal.src}`}
             alt={producto.nombre}
           />
         ) : (
@@ -167,7 +168,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
               {
                 ...producto,
                 imagen: imagenPrincipal
-                  ? `http://localhost:3001${imagenPrincipal.src}`
+                  ? `${BASE_URL}${imagenPrincipal.src}`
                   : null,
               },
               talleSeleccionado,
