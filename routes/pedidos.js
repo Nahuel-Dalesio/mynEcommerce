@@ -68,14 +68,14 @@ router.post("/", async (req, res) => {
     );
 
     const pedidoId = pedidoResult.insertId;
-
+    console.log("pedidoId:", pedidoId);
     // 4️⃣ Detalle pedido
     for (const p of carrito) {
       await conn.query(
         `INSERT INTO detallePedido
          (idPedido, idProducto, nombreProducto, talle, cantidad, precioUnitario)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, p.precio],
+        [pedidoId, p.idProducto, p.nombre, p.talle, p.cantidad, Number(p.precio)],
       );
     }
 
