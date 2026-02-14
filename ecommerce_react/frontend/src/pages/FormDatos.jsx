@@ -90,8 +90,7 @@ function FormDatos({ limpiarCarrito }) {
       Swal.fire('Error', 'No se pudo guardar el pedido', 'error');
       return;
     }
-    console.log("TOTAL DENTRO DE HANDLE:", total);
-    
+
     // Enviar mensaje a WhatsApp
     enviarWhatsapp({
       numeroPedido: data.numeroPedido,
