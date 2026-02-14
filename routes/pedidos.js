@@ -55,9 +55,9 @@ router.post("/", async (req, res) => {
 
     let numeroPedido = 1;
 
-    if (ultimo[0].maxNum) {
+    if (ultimo[0].maxNum !== null) {
       const incremento = Math.floor(Math.random() * 20) + 1;
-      numeroPedido = ultimo[0].maxNum + incremento;
+      numeroPedido = Number(ultimo[0].maxNum) + incremento;
     }
 
     // 3️⃣ Insertar pedido
