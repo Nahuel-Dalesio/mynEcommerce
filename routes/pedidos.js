@@ -10,9 +10,11 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Datos incompletos" });
   }
 
-  const conn = await pool.getConnection();
+  let conn;
 
   try {
+    conn = await pool.getConnection();
+    console.log("✅ CONEXIÓN OK");
     await conn.beginTransaction();
 
     // Normalizar datos
