@@ -79,7 +79,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
         {imagenPrincipal ? (
           <img
             className="imagenPrincipal"
-            src={`${BASE_URL}${imagenPrincipal.src}`}
+            src={`${imagenPrincipal.src}`}
             alt={producto.nombre}
           />
         ) : (
@@ -168,7 +168,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
               {
                 ...producto,
                 imagen: imagenPrincipal
-                  ? `${BASE_URL}${imagenPrincipal.src}`
+                  ? `${imagenPrincipal.src}`
                   : null,
               },
               talleSeleccionado,
