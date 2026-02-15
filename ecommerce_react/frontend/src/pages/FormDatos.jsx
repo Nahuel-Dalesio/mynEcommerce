@@ -1,41 +1,41 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import './formDatos.css';
-import usePedido from '../hooks/usePedido.js';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import "./formDatos.css";
+import usePedido from "../hooks/usePedido.js";
 
 function FormDatos({ limpiarCarrito }) {
   const { guardarPedido, error, loading } = usePedido();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(() => {
-    const guardado = localStorage.getItem('cliente');
+    const guardado = localStorage.getItem("cliente");
     return guardado
       ? JSON.parse(guardado)
-      : { nombre: '', apellido: '', telefono: '' };
+      : { nombre: "", apellido: "", telefono: "" };
   });
 
-  function enviarWhatsapp({ numeroPedido, cliente, carrito, total }) {
-    const telefono = '5491176194154';
+  function enviarWhatsapp({ numeroPedido, cliente, carrito, total, whatsappWindow }) {
+    const telefono = "5491176194154";
 
-    let mensaje = '';
-    mensaje += '¡Hola! Quiero realizar un pedido\n\n';
-    mensaje += 'PRODUCTOS:\n';
+    let mensaje = "";
+    mensaje += "¡Hola! Quiero realizar un pedido\n\n";
+    mensaje += "PRODUCTOS:\n";
 
     carrito.forEach((prod, i) => {
       mensaje += `${i + 1}.  ${prod.nombre} - ${prod.cantidad}u - Talle: ${prod.talle} - $${prod.precio}\n`;
     });
 
-    mensaje += '\nTOTAL: $' + total + '\n';
-    mensaje += 'PEDIDO: #' + numeroPedido + '\n\n';
-    mensaje += 'DATOS DEL CLIENTE:\n\n';
-    mensaje += 'Nombre: ' + cliente.nombre + '\n';
-    mensaje += 'Apellido: ' + cliente.apellido + '\n';
-    mensaje += 'Teléfono: ' + cliente.telefono;
+    mensaje += "\nTOTAL: $" + total + "\n";
+    mensaje += "PEDIDO: #" + numeroPedido + "\n\n";
+    mensaje += "DATOS DEL CLIENTE:\n\n";
+    mensaje += "Nombre: " + cliente.nombre + "\n";
+    mensaje += "Apellido: " + cliente.apellido + "\n";
+    mensaje += "Teléfono: " + cliente.telefono;
 
     const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
 
-    window.open(url, '_blank');
+    whatsappWindow.location.href = url;
   }
 
   // Manejo de inputs
@@ -48,46 +48,50 @@ function FormDatos({ limpiarCarrito }) {
     e.preventDefault();
 
     if (!formData.nombre || !formData.apellido || !formData.telefono) {
-      Swal.fire({ title: 'Completá todos los campos', icon: 'warning' });
+      Swal.fire({ title: "Completá todos los campos", icon: "warning" });
       return;
     }
 
-    const telefonoLimpio = formData.telefono.replace(/\D/g, '');
+    const telefonoLimpio = formData.telefono.replace(/\D/g, "");
 
     // Validar formato
     if (telefonoLimpio.length < 10 || telefonoLimpio.length > 13) {
       Swal.fire({
-        title: 'Teléfono inválido',
-        text: 'Forma correcta:\n11 2345 6789',
-        icon: 'error',
+        title: "Teléfono inválido",
+        text: "Forma correcta:\n11 2345 6789",
+        icon: "error",
         customClass: {
-          popup: 'swal-pre',
+          popup: "swal-pre",
         },
       });
       return;
     }
 
     const result = await Swal.fire({
-      title: '¿Confirmar pedido?',
-      text: 'Te vamos a redirigir a WhatsApp',
-      icon: 'question',
+      title: "¿Confirmar pedido?",
+      text: "Te vamos a redirigir a WhatsApp",
+      icon: "question",
       showCancelButton: true,
-      confirmButtonText: 'Sí, continuar',
-      cancelButtonText: 'Cancelar',
+      confirmButtonText: "Sí, continuar",
+      cancelButtonText: "Cancelar",
     });
 
     if (!result.isConfirmed) return;
 
     // Guardar cliente en localStorage
-    localStorage.setItem('cliente', JSON.stringify(formData));
+    localStorage.setItem("cliente", JSON.stringify(formData));
 
-    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const total = carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
+
+    // 🚀 Abrimos una ventana vacía **antes** del await para que WhatsApp no sea bloqueado en móvil
+    const whatsappWindow = window.open("about:blank", "_blank");
 
     const data = await guardarPedido({ cliente: formData, carrito, total });
 
     if (!data) {
-      Swal.fire('Error', 'No se pudo guardar el pedido', 'error');
+      Swal.fire("Error", "No se pudo guardar el pedido", "error");
+      whatsappWindow.close();
       return;
     }
 
@@ -97,56 +101,57 @@ function FormDatos({ limpiarCarrito }) {
       cliente: formData,
       carrito,
       total,
+      whatsappWindow,
     });
     // ✅ Limpiar campos del formulario
-    setFormData({ nombre: '', apellido: '', telefono: '' });
+    setFormData({ nombre: "", apellido: "", telefono: "" });
 
     // ✅ Limpiar carrito si querés
     limpiarCarrito();
-    localStorage.removeItem('carrito');
-    localStorage.removeItem('cliente');
+    localStorage.removeItem("carrito");
+    localStorage.removeItem("cliente");
 
     // ✅ Volver a inicio
-    navigate('/');
+    navigate("/");
   }
 
   return (
-    <div className='checkout-container'>
+    <div className="checkout-container">
       <h2>Datos del Cliente</h2>
 
-      <form onSubmit={handleSubmit} className='checkout-form'>
+      <form onSubmit={handleSubmit} className="checkout-form">
         <label>Nombre</label>
         <input
-          type='text'
-          name='nombre'
+          type="text"
+          name="nombre"
           value={formData.nombre}
-          placeholder='Julian'
+          placeholder="Julian"
           onChange={handleChange}
           required
         />
 
         <label>Apellido</label>
         <input
-          type='text'
-          name='apellido'
+          type="text"
+          name="apellido"
           value={formData.apellido}
-          placeholder='Rodriguez'
+          placeholder="Rodriguez"
           onChange={handleChange}
           required
         />
 
         <label>Teléfono</label>
         <input
-          type='tel'
-          name='telefono'
+          type="tel"
+          name="telefono"
           value={formData.telefono}
           onChange={handleChange}
-          placeholder='11 2345 6789'
+          placeholder="11 2345 6789"
           required
         />
 
-        <button type='submit' disabled={loading}>
-          {loading ? 'Guardando...' : 'Continuar'}
+        <button type="submit" disabled={loading}>
+          {loading ? "Guardando..." : "Continuar"}
         </button>
       </form>
     </div>
