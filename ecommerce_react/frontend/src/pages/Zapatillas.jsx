@@ -4,14 +4,14 @@ import ProductoCard from "../componentes/ProductoCard";
 function Zapatillas({ abrirGaleria }) {
   const { productos, loading, error } = useProductos("Zapatillas");
 
-  if (loading) return <p>Cargando zapatillas...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p className="text-center">Cargando zapatillas...</p>;
+  if (error) return <p className="text-center">{error}</p>;
 
   return (
     <div>
       
 
-      {productos.length === 0 && <p>No hay zapatillas</p>}
+      {productos.length === 0 && <p className="text-center">No hay zapatillas</p>}
 
       <div id="productos">
         {productos.map(producto => (

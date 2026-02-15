@@ -1,63 +1,49 @@
-import "./Navbar.css";
 import { NavLink } from "react-router-dom";
+import { useNavbar } from "./useNavBar";
+import "./Navbar.css";
 
 function Navbar() {
+  const { menuAbierto, toggleMenu, cerrarMenu } = useNavbar();
+
   return (
-    <ul className="barra w-full">
-      <li className="logo deco">
-        <NavLink to="/" end>
-          <img
-            src="logoMyn.jpg"
-            alt="Logo"
-          />
-        </NavLink>
-      </li>
+    <nav className="navbar">
 
-      <li className="barraItems">
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) =>
-            `barraLinks ${isActive ? "activo" : ""}`
-          }
-        >
-          Inicio
-        </NavLink>
-      </li>
+      <div className="hamburguesa" onClick={toggleMenu}>
+        ☰
+      </div>
 
-      <li className="barraItems">
-        <NavLink
-          to="/remeras"
-          className={({ isActive }) =>
-            `barraLinks ${isActive ? "activo" : ""}`
-          }
-        >
-          Remeras
-        </NavLink>
-      </li>
+      <ul className={`barra ${menuAbierto ? "activo" : ""}`}>
+        <li>
+          <NavLink to="/" className="logo">
+        <img src="logoMyn.jpg" alt="Logo" />
+      </NavLink>
 
-      <li className="barraItems">
-        <NavLink
-          to="/Abrigos"
-          className={({ isActive }) =>
-            `barraLinks ${isActive ? "activo" : ""}`
-          }
-        >
-          Abrigos
-        </NavLink>
-      </li>
+        </li>
+        <li className="barraItems">
+          <NavLink to="/" end onClick={cerrarMenu} className="barraLinks">
+            Inicio
+          </NavLink>
+        </li>
 
-      <li className="barraItems">
-        <NavLink
-          to="/Zapatillas"
-          className={({ isActive }) =>
-            `barraLinks ${isActive ? "activo" : ""}`
-          }
-        >
-          Zapatillas
-        </NavLink>
-      </li>
-    </ul>
+        <li className="barraItems">
+          <NavLink to="/remeras" onClick={cerrarMenu} className="barraLinks">
+            Remeras
+          </NavLink>
+        </li>
+
+        <li className="barraItems">
+          <NavLink to="/Abrigos" onClick={cerrarMenu} className="barraLinks">
+            Abrigos
+          </NavLink>
+        </li>
+
+        <li className="barraItems">
+          <NavLink to="/Zapatillas" onClick={cerrarMenu} className="barraLinks">
+            Zapatillas
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
   );
 }
 

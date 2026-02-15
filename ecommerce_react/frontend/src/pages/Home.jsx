@@ -4,14 +4,13 @@ import ProductoCard from "../componentes/ProductoCard";
 function Home({ abrirGaleria }) {
   const { productos, loading, error } = useProductos();
 
-  if (loading) return <p>Cargando Home...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p className="text-center">Cargando Home...</p>;
+  if (error) return <p className="text-center">{error}</p>;
 
   return (
     <div>
-      <h2>Home</h2>
 
-      {productos.length === 0 && <p>No hay productos</p>}
+      {productos.length === 0 && <p className="text-center">No hay productos</p>}
 
       <div id="productos">
         {productos.map(producto => (
