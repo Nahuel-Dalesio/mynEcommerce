@@ -77,11 +77,8 @@ img {
   color: var(--colorprimario);
 }
 @media (max-width: 768px) {
-  .logo {
-    width: 150px;
-  }
   .logoFoot {
-    width: 120px;
+    width: 100px;
   }
   .footer-brand {
     justify-content: space-between;
@@ -93,7 +90,11 @@ img {
     font-size: smaller;
   }
   .logoRedes {
-    width: 34px;
-    height: 34px;
+    width: 26px;
+    height: 26px;
+  }
+  .footer-brand img{
+    padding: 0px;
+    margin: 0px;
   }
 }
