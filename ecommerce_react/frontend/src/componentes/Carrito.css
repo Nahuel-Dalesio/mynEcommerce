@@ -10,6 +10,13 @@
   border: 3px solid #222;
   border-radius: 0 15px 15px 0;
 }
+.iconClose {
+  display: block;
+  background-color: black;
+  color: #000;
+  z-index: 2000;
+  width: 30px;
+}
 .card-carrito {
   width: 100%;
   display: flex;
@@ -75,6 +82,10 @@
   margin-right: 24px;
 }
 @media (max-width: 768px) {
+  .mostrar {
+    width: 100vw;
+    border-radius: 0;
+  }
 
   .card-carrito {
     flex-wrap: wrap;
@@ -85,7 +96,7 @@
     margin: 4px;
   }
   .art {
-    width: 100px;
+    width: 50px;
   }
   .imagenCarrito {
     margin: 0;
@@ -93,8 +104,20 @@
     height: 50px;
   }
   .tituloCarrito {
-  font-size: 20px;
-  text-align: center;
-  padding: 1.5rem;
-}
+    font-size: 20px;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .eliminar-carrito {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+  }
+  .talle {
+    padding: 0;
+    margin-right: 0;
+  }
+  .iconClose{
+    color: black;
+  }
 }
