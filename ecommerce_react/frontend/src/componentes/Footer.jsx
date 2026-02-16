@@ -26,7 +26,7 @@ function Footer() {
       </ul>
 
       <div className='footer-brand'>
-        <img className='logo' src='../logoMyn.jpg' alt='logomyn' />
+        <img className='logo logoFoot' src='../logoMyn.jpg' alt='logomyn' />
         {/* #TODO Agregar paginas internas */}
         <div>
           <ul className='footer-contact'>

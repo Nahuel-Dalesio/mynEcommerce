@@ -65,7 +65,7 @@
   align-items: center;
   gap: 10px;
 }
-.btnContador{
+.btnContador {
   width: 32px;
   height: 32px;
   border-radius: 10%;
@@ -79,14 +79,25 @@
 .btnContador:disabled {
   z-index: 1;
   opacity: 0.5;
-  cursor:default;
+  cursor: default;
 }
-.img-click{
+.img-click {
   cursor: pointer;
 }
+
 @media (max-width: 768px) {
-  #productos{
+  #productos {
     margin: 16px;
   }
-
+  .cardProducto img {
+    width: 250px;
+    height: 300px;
+    border-radius: 20px;
+  }
+  .contenedorProducto {
+    padding: 10px;
+    margin: 4px;
+    border: var(--colorprincipal) 2px solid;
+    border-radius: 20px;
+  }
 }

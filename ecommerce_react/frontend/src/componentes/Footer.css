@@ -1,27 +1,27 @@
-img{
+img {
   width: 150px;
   margin: 10px;
   padding: 6px;
   border-radius: 20px;
 }
 .footer-top {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 150px;
-    padding: 10px;
-    background-color: var(--colorsecundario);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 150px;
+  padding: 10px;
+  background-color: var(--colorsecundario);
 }
-.logo{
+.logo {
   list-style: none;
 }
-.logo a{
-    text-decoration: none;
-    color: var(--colorprimario);
+.logo a {
+  text-decoration: none;
+  color: var(--colorprimario);
 }
-.logo a:hover{
-    color: var(--colorterciario);
-    text-decoration: underline;
+.logo a:hover {
+  color: var(--colorterciario);
+  text-decoration: underline;
 }
 
 .logoRedes {
@@ -31,65 +31,69 @@ img{
   fill: currentColor;
 }
 .footer-bottom {
-    text-align: center;
-    padding: 12px;
-    background-color: var(--colorterciario);
-    color: var(--colorsecundario);
-    font-size: 24px;
-    margin-bottom: 4px;
+  text-align: center;
+  padding: 12px;
+  background-color: var(--colorterciario);
+  color: var(--colorsecundario);
+  font-size: 24px;
+  margin-bottom: 4px;
 }
-.footer-brand{
+.footer-brand {
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 10px;
 }
-.font{
-  font-family: 'Arial', sans-serif;
+.font {
+  font-family: "Arial", sans-serif;
   padding: 4px;
   font-weight: bold;
   font-size: small;
-
 }
-.footer-contact{
+.footer-contact {
   text-align: center;
 }
-.pad{
+.pad {
   padding: 4px;
 }
-.legalPadre{
+.legalPadre {
   display: flex;
   justify-content: center;
-
 }
-.centrar{
+.centrar {
   text-align: center;
   font-size: xx-small;
-  font-weight:lighter;
+  font-weight: lighter;
   list-style: none;
   width: 220px;
   margin-bottom: 4px;
 }
-.centrar:hover{
+.centrar:hover {
   color: var(--colorterciario);
-    text-decoration: underline;
+  text-decoration: underline;
 }
-.legal{
+.legal {
   text-decoration: none;
   color: var(--colorprimario);
 }
-@media (max-width: 768px){
-  .logo{
+@media (max-width: 768px) {
+  .logo {
     width: 150px;
   }
-  .footer-brand{
+  .logoFoot {
+    width: 120px;
+  }
+  .footer-brand {
     justify-content: space-between;
   }
-  .footer-contact{
+  .footer-contact {
     font-size: x-small;
-
   }
-  .font{
+  .font {
     font-size: smaller;
+  }
+  .logoRedes {
+    width: 34px;
+    height: 34px;
   }
 }
