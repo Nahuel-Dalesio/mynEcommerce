@@ -90,7 +90,7 @@
   .card-carrito {
     flex-wrap: wrap;
     font-size: x-small;
-    justify-content: start;
+    /* justify-content: start; */
   }
   .lista {
     margin: 4px;
