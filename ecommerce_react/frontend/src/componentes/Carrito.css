@@ -1,17 +1,16 @@
-
-.mostrar{
+.mostrar {
   display: block;
-  position:fixed;
-  z-index: 20000;
+  position: fixed;
+  z-index: 2;
   top: 0;
-  width: 80%;
-  height: 100%;
+  width: 80vw;
+  height: 100vh;
   overflow: auto;
-  background-color:white;
+  background-color: white;
   border: 3px solid #222;
   border-radius: 0 15px 15px 0;
 }
-.card-carrito{
+.card-carrito {
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -20,36 +19,36 @@
   border: 3px solid #222;
   border-radius: 10px;
 }
-.imagenCarrito{
+.imagenCarrito {
   width: 100px;
   height: 100px;
 }
-.lista{
+.lista {
   list-style-type: none;
 }
-.art{
-  min-width: 200px;
+.art {
+  width: 200px;
 }
-.lista img{
+.lista img {
   padding-top: 4px;
 }
-.tituloCarrito{
+.tituloCarrito {
   font-size: 30px;
   text-align: center;
   padding: 2rem;
 }
-.eliminar-carrito{
+.eliminar-carrito {
   width: 50px;
   padding: 10px;
   margin: 2px;
   cursor: pointer;
   border: 1px solid rgba(146, 146, 187, 0.254);
-  box-shadow:1px 1px 1px 1px #3A4454;
+  box-shadow: 1px 1px 1px 1px #3a4454;
 }
-.eliminar-carrito:hover{
-  box-shadow:2px 2px 3px 2px #3A4454;
+.eliminar-carrito:hover {
+  box-shadow: 2px 2px 3px 2px #3a4454;
 }
-.pTota{
+.pTota {
   text-align: center;
   padding: 2rem;
   margin: 10px 0;
@@ -57,22 +56,45 @@
   background-color: var(--coloracento);
   color: var(--colorprincipal);
 }
-.btn-comprar{
+.btn-comprar {
   width: 90%;
   margin: 1rem;
   padding: 10px;
-  border-radius:20px;
+  border-radius: 20px;
   background-color: var(--colorprincipal);
   color: var(--colorsecundario);
-  cursor:pointer;
-  box-shadow:5px 3px 10px 2px #3A4454;
+  cursor: pointer;
+  box-shadow: 5px 3px 10px 2px #3a4454;
 }
-.btn-comprar:hover{
+.btn-comprar:hover {
   background-color: var(--coloracento);
   color: var(--colorprincipal);
-
 }
-.talle{
+.talle {
   padding: 6px;
   margin-right: 24px;
+}
+@media (max-width: 768px) {
+
+  .card-carrito {
+    flex-wrap: wrap;
+    font-size: x-small;
+    justify-content: start;
+  }
+  .lista {
+    margin: 4px;
+  }
+  .art {
+    width: 100px;
+  }
+  .imagenCarrito {
+    margin: 0;
+    width: 50px;
+    height: 50px;
+  }
+  .tituloCarrito {
+  font-size: 20px;
+  text-align: center;
+  padding: 1.5rem;
+}
 }

@@ -1,7 +1,7 @@
 .productoDetalle {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 20px;
   gap: 20px;
 }
@@ -117,4 +117,12 @@
 }
 .precioTachado{
   text-decoration: line-through;
+}
+@media (max-width: 768px){
+  .productoDetalle{
+    flex-direction: column;
+  }
+  .imagenesSecundarias{
+    flex-direction: row;
+  }
 }

@@ -3,10 +3,9 @@
   margin: 10px;
   border: var(--colorprincipal) 2px solid;
   border-radius: 20px;
-  min-width: 425px;
 }
 .cardProducto {
-  margin: 10px;
+  margin: 24px;
   padding: 10px;
   gap: 20px;
   background-color: rgb(240, 248, 255);
@@ -84,4 +83,10 @@
 }
 .img-click{
   cursor: pointer;
+}
+@media (max-width: 768px) {
+  #productos{
+    margin: 16px;
+  }
+
 }

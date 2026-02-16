@@ -78,3 +78,18 @@ img{
   text-decoration: none;
   color: var(--colorprimario);
 }
+@media (max-width: 768px){
+  .logo{
+    width: 150px;
+  }
+  .footer-brand{
+    justify-content: space-between;
+  }
+  .footer-contact{
+    font-size: x-small;
+
+  }
+  .font{
+    font-size: smaller;
+  }
+}
