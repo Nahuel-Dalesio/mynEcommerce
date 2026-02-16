@@ -95,9 +95,10 @@
   .lista {
     margin: 4px;
   }
-  /* .art {
+  .art {
     width: 120px;
-  } */
+    border: 1px solid rgba(146, 146, 187, 0.254);
+  }
   .imagenCarrito {
     margin: 0;
     width: 50px;
