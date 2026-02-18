@@ -15,13 +15,14 @@ async function obtenerProductosPorCategoria(categoria) {
       p.descripcion,
       p.precio,
       p.categoria,
+      p.activo,
       i.src AS imagen,
       i.esPrincipal
     FROM producto p
     LEFT JOIN imagenesproducto i 
       ON i.idProducto = p.idProducto 
       AND i.esPrincipal = 1
-    WHERE LOWER(p.categoria) = LOWER(?)
+    WHERE LOWER(p.categoria) = LOWER(?) AND p.activo = 1
   `;
 
   const [rows] = await pool.query(query, [categoria]);
@@ -72,14 +73,14 @@ async function obtenerProductoPorId(idProducto) {
       p.enOferta,
       p.precioOferta,
       p.categoria,
-      p.activo,
+      
       ps.idProductoStock,
       ps.talle,
       ps.stock
     FROM producto p
     INNER JOIN productostock ps 
       ON ps.IdProduct = p.idProducto
-    WHERE p.idProducto = ? AND p.activo = 1
+    WHERE p.idProducto = ? 
   `;
 
   const [rows] = await pool.query(query, [idProducto]);
