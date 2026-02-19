@@ -37,13 +37,14 @@ async function obtenerProductosDestacados() {
       p.descripcion,
       p.precio,
       p.categoria,
+      p.activo,
       i.src AS imagen,
       i.esPrincipal
     FROM producto p
     LEFT JOIN imagenesproducto i 
       ON i.idProducto = p.idProducto 
       AND i.esPrincipal = 1
-    WHERE p.esDestacado = 1
+    WHERE p.esDestacado = 1 and p.activo = 1
   `;
 
   const [rows] = await pool.query(query);
