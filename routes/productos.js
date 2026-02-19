@@ -73,14 +73,14 @@ async function obtenerProductoPorId(idProducto) {
       p.enOferta,
       p.precioOferta,
       p.categoria,
-      
+      p.activo,
       ps.idProductoStock,
       ps.talle,
       ps.stock
     FROM producto p
     INNER JOIN productostock ps 
       ON ps.IdProduct = p.idProducto
-    WHERE p.idProducto = ? 
+    WHERE p.idProducto = ? and p.activo = 1
   `;
 
   const [rows] = await pool.query(query, [idProducto]);
