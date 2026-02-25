@@ -24,3 +24,7 @@ backend/conexion.js
 *.njsproj
 *.sln
 *.sw?
+
+# Docker (local only)
+docker-compose.yml
+mysql_data/
