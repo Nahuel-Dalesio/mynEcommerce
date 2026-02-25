@@ -1,9 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { BASE_URL } from "../config";
+import { AuthContext } from "../context/AuthContext";
 
 export function useAdminProductos() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { token } = useContext(AuthContext);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -27,7 +29,10 @@ export function useAdminProductos() {
     try {
       const response = await fetch(`${BASE_URL}/api/products`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(product),
       });
       if (!response.ok) {
@@ -49,7 +54,10 @@ export function useAdminProductos() {
     try {
       const response = await fetch(`${BASE_URL}/api/products/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(product),
       });
       if (!response.ok) {
@@ -71,6 +79,9 @@ export function useAdminProductos() {
     try {
       const response = await fetch(`${BASE_URL}/api/products/${id}`, {
         method: "DELETE",
+        headers: { 
+          "Authorization": `Bearer ${token}`
+        },
       });
       if (!response.ok) {
         const errorData = await response.json();
