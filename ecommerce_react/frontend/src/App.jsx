@@ -20,6 +20,10 @@ import Contactanos from './pages/Contatanos.jsx';
 import Sugerencias from "./pages/Sugerencias";
 import Terminos from "./pages/Terminos";
 import Privacidad from "./pages/Privacidad";
+import AdminProductos from "./pages/AdminProductos";
+import Login from "./pages/Login";
+import ProtectedRoute from "./componentes/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 import ScrollToTop from "./componentes/ScrollToTop";
 import { BASE_URL } from "./config";
 
@@ -122,8 +126,7 @@ function App() {
     setMostrarGaleria(true);
   };
   return (
-    <>
-      
+    <AuthProvider>
       <Header
         onCrearUsuario={() => setMostrarModal('crear')}
         onIniciarSesion={() => setMostrarModal('login')}
@@ -196,6 +199,13 @@ function App() {
             />
           }
         />
+        
+        {/* Rutas de autenticación y protegidas */}
+        <Route path="/login" element={<Login />} />
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/admin/productos" element={<AdminProductos />} />
+        </Route>
+
         <Route
           path='/checkout'
           element={<FormDatos limpiarCarrito={() => setCarrito([])} />}
@@ -216,7 +226,7 @@ function App() {
 
       <Footer />
       <ToastContainer />
-    </>
+    </AuthProvider>
   );
 }
 

@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
 import dotenv from "dotenv";
 import productsRoutes from "./routes/products.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api/productos", productosRoutes);
 app.use("/api/pedidos", pedidosRoutes);
 
 app.use("/api", productsRoutes);
+app.use("/api", authRoutes);
 
 const PORT = process.env.PORT || 3001;
 
