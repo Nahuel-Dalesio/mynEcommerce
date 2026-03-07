@@ -1,3 +1,5 @@
+//componentes/FormProducto.jsx
+
 import React, { useState, useEffect } from "react";
 import "./formProducto.css";
 
@@ -41,7 +43,15 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
       alert("Por favor completa los campos obligatorios (Nombre, Precio, Categoría)");
       return;
     }
-    onSubmit(formData);
+
+    const product = {
+    ...formData,
+    precioOferta: formData.enOferta === 1 && formData.precioOferta
+      ? Number(formData.precioOferta)
+      : null
+  };
+
+    onSubmit(product);
   };
 
   return (

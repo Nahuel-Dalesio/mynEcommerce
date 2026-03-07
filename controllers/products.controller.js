@@ -41,7 +41,12 @@ export const create = async (req, res) => {
     const error = validateProduct(req.body);
     if (error) return res.status(400).json({ message: error });
 
-    const id = await createProduct(req.body);
+    const product = {
+      ...req.body,
+      precioOferta: req.body.precioOferta === "" ? null : req.body.precioOferta
+    };
+
+    const id = await createProduct(product);
 
     res.status(201).json({
       message: "Producto creado correctamente",

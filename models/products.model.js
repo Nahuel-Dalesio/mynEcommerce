@@ -1,3 +1,4 @@
+// models/products.model.js
 import pool from "../conexion.js";
 
 export const getAllProducts = async () => {
