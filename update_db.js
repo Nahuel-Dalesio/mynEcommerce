@@ -4,12 +4,12 @@ const updateDb = async () => {
   try {
     console.log("Actualizando base de datos...");
 
-    // Añadir columna activo a producto si no existe
-    await pool.query(`
-      ALTER TABLE producto 
-      ADD COLUMN IF NOT EXISTS activo TINYINT(1) DEFAULT 1
-    `);
-    console.log("Columna 'activo' verificada/añadida en 'producto'.");
+    // // Añadir columna activo a producto si no existe
+    // await pool.query(`
+    //   ALTER TABLE producto 
+    //   ADD COLUMN IF NOT EXISTS activo TINYINT(1) DEFAULT 1
+    // `);
+    // console.log("Columna 'activo' verificada/añadida en 'producto'.");
 
     // Crear tabla usuario
     await pool.query(`

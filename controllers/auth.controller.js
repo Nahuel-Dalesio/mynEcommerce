@@ -9,7 +9,7 @@ const SECRET = process.env.JWT_SECRET || "fallback_secret";
 
 export const register = async (req, res) => {
   const { email, password } = req.body;
-  
+  console.log("Login request body:", req.body); // <-- aquí
   if (!email || !password) {
     return res.status(400).json({ message: "Email y contraseña requeridos" });
   }
@@ -38,11 +38,13 @@ export const login = async (req, res) => {
 
   try {
     const user = await findUserByEmail(email);
+    console.log("Usuario encontrado:", user);
     if (!user) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("¿Contraseña coincide?", isMatch);
     if (!isMatch) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
