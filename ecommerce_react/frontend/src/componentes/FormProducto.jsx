@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./formProducto.css";
 
 const FormProducto = ({ producto, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -44,23 +45,23 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="form-container" style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "8px", background: "#f9f9f9", maxWidth: "500px", margin: "20px auto" }}>
-      <h3>{producto ? "Editar Producto" : "Nuevo Producto"}</h3>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div className="form-container">
+      <h3 className="title">{producto ? "Editar Producto" : "Nuevo Producto"}</h3>
+      <form onSubmit={handleSubmit}>
         <div>
-          <label>Nombre*:</label>
-          <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required style={{ width: "100%" }} />
+          <label>Nombre del producto:</label>
+          <input className="inputs" placeholder="Remera Rip Curl" type="text" name="nombre" value={formData.nombre} onChange={handleChange} required style={{ width: "100%" }} />
         </div>
         <div>
           <label>Descripción:</label>
-          <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} style={{ width: "100%" }} />
+          <textarea className="description" placeholder="Remeras corte clásico, algodón peinado 24/1" name="descripcion" value={formData.descripcion} onChange={handleChange} style={{ width: "100%" }} />
         </div>
         <div>
-          <label>Precio*:</label>
+          <label>Precio:</label>
           <input type="number" name="precio" value={formData.precio} onChange={handleChange} required style={{ width: "100%" }} />
         </div>
         <div>
-          <label>Categoría*:</label>
+          <label>Categoría:</label>
           <select name="categoria" value={formData.categoria} onChange={handleChange} required style={{ width: "100%" }}>
             <option value="">Selecciona una...</option>
             <option value="Remeras">Remeras</option>
@@ -68,25 +69,34 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
             <option value="Zapatillas">Zapatillas</option>
           </select>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <label>¿Es Destacado?</label>
-          <input type="checkbox" name="esDestacado" checked={formData.esDestacado === 1} onChange={handleChange} />
+        <div className="checkbox-row">
+          <label>
+            ¿Es Destacado? <br />
+            <span className="label-span">(Se vera en la pagina de inicio) </span>
+          </label>
+          
+          <input className="check" type="checkbox" name="esDestacado" checked={formData.esDestacado === 1} onChange={handleChange} />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <label>¿En Oferta?</label>
-          <input type="checkbox" name="enOferta" checked={formData.enOferta === 1} onChange={handleChange} />
+        <div className="checkbox-row
+        ">
+          <label>¿En Oferta?  <br />
+            <span className="label-span">(Se vera en la pagina de precio) </span>
+          </label>
+          <input className="check" type="checkbox" name="enOferta" checked={formData.enOferta === 1} onChange={handleChange} />
         </div>
         {formData.enOferta === 1 && (
           <div>
+            {/* TODO: Hacer que cuando estamos en en editar producto si tiene precio oferta aparesca el check de en oferta marcado y con el display block del precio en oferta activo */}
+            
             <label>Precio Oferta:</label>
             <input type="number" name="precioOferta" value={formData.precioOferta} onChange={handleChange} style={{ width: "100%" }} />
           </div>
         )}
         <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-          <button type="submit" style={{ padding: "8px 16px", background: "#28a745", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+          <button type="submit" className="form-buttons">
             {producto ? "Actualizar" : "Guardar"}
           </button>
-          <button type="button" onClick={onCancel} style={{ padding: "8px 16px", background: "#6c757d", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+          <button type="button" onClick={onCancel} className="form-buttons">
             Cancelar
           </button>
         </div>

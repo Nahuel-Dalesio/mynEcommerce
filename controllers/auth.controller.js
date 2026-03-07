@@ -1,3 +1,5 @@
+// controllers/auth.controller.js
+
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { findUserByEmail, createUser } from "../models/auth.model.js";

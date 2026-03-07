@@ -24,6 +24,7 @@ backend/conexion.js
 *.njsproj
 *.sln
 *.sw?
+ps.js
 
 # Docker (local only)
 docker-compose.yml
