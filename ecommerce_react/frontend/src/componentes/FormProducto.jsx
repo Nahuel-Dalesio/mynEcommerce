@@ -12,6 +12,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
     enOferta: 0,
     precioOferta: "",
     categoria: "",
+    imagenes: [],
   });
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         enOferta: producto.enOferta || 0,
         precioOferta: producto.precioOferta || "",
         categoria: producto.categoria || "",
+        imagenes: Array.isArray(producto.imagenes) ? producto.imagenes : [],
       });
     }
   }, [producto]);
@@ -40,66 +42,156 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
     e.preventDefault();
     // Basic validation
     if (!formData.nombre || !formData.precio || !formData.categoria) {
-      alert("Por favor completa los campos obligatorios (Nombre, Precio, Categoría)");
+      alert(
+        "Por favor completa los campos obligatorios (Nombre, Precio, Categoría)",
+      );
       return;
     }
 
     const product = {
-    ...formData,
-    precioOferta: formData.enOferta === 1 && formData.precioOferta
-      ? Number(formData.precioOferta)
-      : null
-  };
+      ...formData,
+      precioOferta:
+        formData.enOferta === 1 && formData.precioOferta
+          ? Number(formData.precioOferta)
+          : null,
+    };
 
     onSubmit(product);
   };
 
   return (
     <div className="form-container">
-      <h3 className="title">{producto ? "Editar Producto" : "Nuevo Producto"}</h3>
+      <h3 className="title">
+        {producto ? "Editar Producto" : "Nuevo Producto"}
+      </h3>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Nombre del producto:</label>
-          <input className="inputs" placeholder="Remera Rip Curl" type="text" name="nombre" value={formData.nombre} onChange={handleChange} required style={{ width: "100%" }} />
+          <input
+            className="inputs"
+            placeholder="Remera Rip Curl"
+            type="text"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+            style={{ width: "100%" }}
+          />
         </div>
         <div>
           <label>Descripción:</label>
-          <textarea className="description" placeholder="Remeras corte clásico, algodón peinado 24/1" name="descripcion" value={formData.descripcion} onChange={handleChange} style={{ width: "100%" }} />
+          <textarea
+            className="description"
+            placeholder="Remeras corte clásico, algodón peinado 24/1"
+            name="descripcion"
+            value={formData.descripcion}
+            onChange={handleChange}
+            style={{ width: "100%" }}
+          />
         </div>
         <div>
           <label>Precio:</label>
-          <input type="number" name="precio" value={formData.precio} onChange={handleChange} required style={{ width: "100%" }} />
+          <input
+            type="number"
+            name="precio"
+            value={formData.precio}
+            onChange={handleChange}
+            required
+            style={{ width: "100%" }}
+          />
         </div>
         <div>
           <label>Categoría:</label>
-          <select name="categoria" value={formData.categoria} onChange={handleChange} required style={{ width: "100%" }}>
+          <select
+            name="categoria"
+            value={formData.categoria}
+            onChange={handleChange}
+            required
+            style={{ width: "100%" }}
+          >
             <option value="">Selecciona una...</option>
             <option value="Remeras">Remeras</option>
             <option value="Abrigos">Abrigos</option>
             <option value="Zapatillas">Zapatillas</option>
           </select>
         </div>
+        <div>
+          <label>Imágenes (ruta en /productos)</label>
+
+          {formData.imagenes.map((img, index) => (
+            <input
+              key={index}
+              type="text"
+              placeholder="/productos/productos/remera1.jpg"
+              value={img}
+              onChange={(e) => {
+                const nuevas = [...formData.imagenes];
+                nuevas[index] = e.target.value;
+                setFormData({ ...formData, imagenes: nuevas });
+              }}
+              style={{ width: "100%", marginBottom: "5px" }}
+            />
+          ))}
+
+          <button
+            className="agregar-imagen"
+            type="button"
+            onClick={() =>
+              setFormData({
+                ...formData,
+                imagenes: [...formData.imagenes, ""],
+              })
+            }
+          >
+            + Agregar imagen
+          </button>
+        </div>
         <div className="checkbox-row">
           <label>
             ¿Es Destacado? <br />
-            <span className="label-span">(Se vera en la pagina de inicio) </span>
+            <span className="label-span">
+              (Se vera en la pagina de inicio){" "}
+            </span>
           </label>
-          
-          <input className="check" type="checkbox" name="esDestacado" checked={formData.esDestacado === 1} onChange={handleChange} />
+
+          <input
+            className="check"
+            type="checkbox"
+            name="esDestacado"
+            checked={formData.esDestacado === 1}
+            onChange={handleChange}
+          />
         </div>
-        <div className="checkbox-row
-        ">
-          <label>¿En Oferta?  <br />
-            <span className="label-span">(Se vera en la pagina de precio) </span>
+        <div
+          className="checkbox-row
+        "
+        >
+          <label>
+            ¿En Oferta? <br />
+            <span className="label-span">
+              (Se vera en la pagina de precio){" "}
+            </span>
           </label>
-          <input className="check" type="checkbox" name="enOferta" checked={formData.enOferta === 1} onChange={handleChange} />
+          <input
+            className="check"
+            type="checkbox"
+            name="enOferta"
+            checked={formData.enOferta === 1}
+            onChange={handleChange}
+          />
         </div>
         {formData.enOferta === 1 && (
           <div>
             {/* TODO: Hacer que cuando estamos en en editar producto si tiene precio oferta aparesca el check de en oferta marcado y con el display block del precio en oferta activo */}
-            
+
             <label>Precio Oferta:</label>
-            <input type="number" name="precioOferta" value={formData.precioOferta} onChange={handleChange} style={{ width: "100%" }} />
+            <input
+              type="number"
+              name="precioOferta"
+              value={formData.precioOferta}
+              onChange={handleChange}
+              style={{ width: "100%" }}
+            />
           </div>
         )}
         <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>

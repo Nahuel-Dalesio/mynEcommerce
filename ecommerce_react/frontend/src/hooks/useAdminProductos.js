@@ -1,3 +1,4 @@
+// hooks/useAdminProductos.js
 import { useState, useCallback, useContext } from "react";
 import { BASE_URL } from "../config";
 import { AuthContext } from "../context/AuthContext";

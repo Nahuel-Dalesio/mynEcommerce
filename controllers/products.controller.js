@@ -1,3 +1,4 @@
+// controllers/products.controller.js
 import {
   createProduct,
   getAllProducts,
@@ -5,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../models/products.model.js";
+import { createImagenProducto } from "../models/imagenesProducto.model.js";
 
 // Helper for validating product data
 const validateProduct = (data) => {
@@ -46,12 +48,24 @@ export const create = async (req, res) => {
       precioOferta: req.body.precioOferta === "" ? null : req.body.precioOferta
     };
 
-    const id = await createProduct(product);
+    const idProducto = await createProduct(product);
+
+    // Guardar imágenes si existen
+    if (req.body.imagenes && req.body.imagenes.length > 0) {
+      for (let i = 0; i < req.body.imagenes.length; i++) {
+        await createImagenProducto({
+          src: req.body.imagenes[i],
+          esPrincipal: i === 0, // la primera será principal
+          idProducto
+        });
+      }
+    }
 
     res.status(201).json({
       message: "Producto creado correctamente",
-      id,
+      id: idProducto,
     });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
