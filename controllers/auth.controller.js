@@ -40,13 +40,12 @@ export const login = async (req, res) => {
 
   try {
     const user = await findUserByEmail(email);
-    console.log("Usuario encontrado:", user);
     if (!user) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("¿Contraseña coincide?", isMatch);
+  
     if (!isMatch) {
       return res.status(401).json({ message: "Credenciales inválidas" });
     }

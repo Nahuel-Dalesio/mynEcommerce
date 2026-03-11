@@ -141,7 +141,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
         </div>
         {talleSeleccionado  && stockDisponible > 0 && (
           <div className="contador">
-            <button disabled = {cantidad == 1 } onClick={() => setCantidad((c) => Math.max(1, c - 1))}>
+            <button className="btn-resta" disabled = {cantidad == 1 } onClick={() => setCantidad((c) => Math.max(1, c - 1))}>
               −
             </button>
 

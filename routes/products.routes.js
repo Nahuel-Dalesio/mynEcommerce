@@ -1,3 +1,4 @@
+// routes/products.routes.js
 import { Router } from "express";
 import { getAll, getById, create, update, remove } from "../controllers/products.controller.js";
 import { verifyToken, isAdmin } from "../middlewares/auth.middleware.js";

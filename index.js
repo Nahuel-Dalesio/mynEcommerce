@@ -24,6 +24,8 @@ app.use(
   express.static(path.join(__dirname, "../frontend/public/productos")),
 );
 
+TODO://Arreglar las rutas por productos o por products elegir una
+
 // rutas API
 app.use("/api/productos", productosRoutes);
 app.use("/api/pedidos", pedidosRoutes);
