@@ -66,7 +66,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
       </h3>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Nombre del producto:</label>
+          <label>Nombre del producto:*</label>
           <input
             className="inputs"
             placeholder="Remera Rip Curl"
@@ -90,7 +90,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
           />
         </div>
         <div>
-          <label>Precio:</label>
+          <label>Precio:*</label>
           <input
             type="number"
             name="precio"
@@ -101,7 +101,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
           />
         </div>
         <div>
-          <label>Categoría:</label>
+          <label>Categoría:*</label>
           <select
             name="categoria"
             value={formData.categoria}

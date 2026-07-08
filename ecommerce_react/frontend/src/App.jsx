@@ -45,6 +45,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem('carrito', JSON.stringify(carrito));
   }, [carrito]);
+  
   const eliminarDelCarrito = (idProducto, talle) => {
     setCarrito((prev) =>
       prev.flatMap((p) => {
@@ -56,9 +57,11 @@ function App() {
       }),
     );
   };
+
   const cerrarCarrito = () => {
     setMostrarCarrito(false);
   };
+
   const agregarAlCarrito = (producto, talle, cantidad, stockTalle) => {
     setCarrito((prev) => {
       const existe = prev.find(
@@ -104,10 +107,12 @@ function App() {
       ];
     });
   };
+
   const totalCarrito = carrito.reduce(
     (acc, prod) => acc + prod.precio * prod.cantidad,
     0,
   );
+
   const abrirGaleria = async (producto) => {
     // Si ya vienen imágenes (raro)
     if (Array.isArray(producto.imagenes)) {
@@ -125,6 +130,7 @@ function App() {
 
     setMostrarGaleria(true);
   };
+
   return (
     <AuthProvider>
       <Header
@@ -155,8 +161,6 @@ function App() {
           element={
             <Home
               abrirGaleria={abrirGaleria}
-              // carrito={carrito}
-              // agregarAlCarrito={agregarAlCarrito}
             />
           }
         />
