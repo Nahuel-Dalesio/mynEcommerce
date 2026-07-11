@@ -4,28 +4,17 @@ import CrearUsuarioModal from './componentes/CrearUsuario.jsx';
 import Carrito from './componentes/Carrito.jsx';
 import Navbar from './componentes/Navbar.jsx';
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx';
-import Remeras from './pages/Remeras.jsx';
-import Abrigos from './pages/Abrigos.jsx';
-import Zapatillas from './pages/Zapatillas.jsx';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
 import GaleriaModal from './componentes/GaleriaModal.jsx';
 import Footer from './componentes/Footer.jsx';
-import ProductoDetalle from './pages/ProductoDetalle.jsx';
-import FormDatos from './pages/FormDatos.jsx';
-import AcercaDeMyn from './pages/AcercaDeMyn.jsx';
-import Contactanos from './pages/Contatanos.jsx';
-import Sugerencias from "./pages/Sugerencias";
-import Terminos from "./pages/Terminos";
-import Privacidad from "./pages/Privacidad";
-import AdminProductos from "./pages/AdminProductos";
-import Login from "./pages/Login";
 import ProtectedRoute from "./componentes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import ScrollToTop from "./componentes/ScrollToTop";
 import { BASE_URL } from "./config";
+import AppRoutes from "./routes/AppRoutes";
+import { useCategorias } from "./hooks/useCategorias";
 
 
 function App() {
@@ -33,6 +22,7 @@ function App() {
   const [mostrarGaleria, setMostrarGaleria] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(null);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
+  const { categorias } = useCategorias();
   const toggleCarrito = () => {
     setMostrarCarrito((prev) => !prev);
   };
@@ -139,6 +129,13 @@ function App() {
         onAbrirCarrito={toggleCarrito}
         toggleButtonRef={toggleButtonRef}
       />
+      <Navbar categories={categorias} />
+      <AppRoutes
+        abrirGaleria={abrirGaleria}
+        carrito={carrito}
+        agregarAlCarrito={agregarAlCarrito}
+        setCarrito={setCarrito}
+      />
       {mostrarModal === 'crear' && (
         <CrearUsuarioModal onClose={() => setMostrarModal(null)} />
       )}
@@ -153,74 +150,7 @@ function App() {
         cerrarCarrito={cerrarCarrito}
         toggleButtonRef={toggleButtonRef}
       />
-      <Navbar />
       <ScrollToTop />
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <Home
-              abrirGaleria={abrirGaleria}
-            />
-          }
-        />
-        <Route
-          path='/remeras'
-          element={
-            <Remeras
-              abrirGaleria={abrirGaleria}
-              // carrito={carrito}
-              // agregarAlCarrito={agregarAlCarrito}
-            />
-          }
-        />
-        <Route
-          path='/Abrigos'
-          element={
-            <Abrigos
-              abrirGaleria={abrirGaleria}
-
-              // agregarAlCarrito={agregarAlCarrito}
-            />
-          }
-        />
-        <Route
-          path='/Zapatillas'
-          element={
-            <Zapatillas
-              abrirGaleria={abrirGaleria}
-              // carrito={carrito}
-              // agregarAlCarrito={agregarAlCarrito}
-            />
-          }
-        />
-        <Route
-          path='/producto/:id'
-          element={
-            <ProductoDetalle
-              agregarAlCarrito={agregarAlCarrito}
-              carrito={carrito}
-            />
-          }
-        />
-        
-        {/* Rutas de autenticación y protegidas */}
-        <Route path="/login" element={<Login />} />
-        <Route element={<ProtectedRoute requiredRole="admin" />}>
-          <Route path="/admin/productos" element={<AdminProductos />} />
-        </Route>
-
-        <Route
-          path='/checkout'
-          element={<FormDatos limpiarCarrito={() => setCarrito([])} />}
-        />
-        <Route path="/AcercaDeMyn" element={<AcercaDeMyn />} />
-        <Route path="/Contactanos" element={<Contactanos />} />
-        <Route path="/Sugerencias" element={<Sugerencias />} />
-        <Route path="/Terminos" element={<Terminos />} />
-        <Route path="/Privacidad" element={<Privacidad />} />
-
-      </Routes>
       {mostrarGaleria && (
         <GaleriaModal
           imagenes={imagenesGaleria}

@@ -1,3 +1,5 @@
+// backend/routes/productos.js
+
 import express from "express";
 import pool from "../conexion.js";
 
@@ -6,6 +8,9 @@ const router = express.Router();
 /* ===============================
    Funciones reutilizables
 ================================ */
+
+
+
 
 async function obtenerProductosPorCategoria(categoria) {
   const query = `
@@ -87,6 +92,16 @@ async function obtenerProductoPorId(idProducto) {
   const [rows] = await pool.query(query, [idProducto]);
   return rows;
 }
+async function obtenerCategorias() {
+  const query = `
+    SELECT DISTINCT categoria
+    FROM producto
+    WHERE activo = 1
+    ORDER BY categoria ASC
+  `;
+  const [rows] = await pool.query(query);
+  return rows.map((row) => row.categoria);
+}
 
 /* ===============================
    Rutas
@@ -104,6 +119,16 @@ router.get("/categoria", async (req, res) => {
     res.json(productos);
   } catch (error) {
     console.error("Error al obtener productos por categoría:", error);
+    res.status(500).json({ error: "Error DB" });
+  }
+});
+
+router.get("/categorias-disponibles", async (_req, res) => {
+  try {
+    const categorias = await obtenerCategorias();
+    res.json(categorias);
+  } catch (error) {
+    console.error("Error al obtener categorías:", error);
     res.status(500).json({ error: "Error DB" });
   }
 });

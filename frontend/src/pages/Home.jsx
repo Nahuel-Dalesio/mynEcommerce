@@ -1,8 +1,10 @@
 import { useProductos } from "../hooks/useProductos";
 import ProductoCard from "../componentes/ProductoCard";
+import { useParams } from "react-router-dom";
 
 function Home({ abrirGaleria }) {
-  const { productos, loading, error } = useProductos();
+  const { categoria } = useParams();
+  const { productos, loading, error } = useProductos(categoria);
 
   if (loading) return <p className="text-center">Cargando Home...</p>;
   if (error) return <p className="text-center">{error}</p>;

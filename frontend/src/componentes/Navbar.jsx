@@ -3,14 +3,12 @@ import { useNavbar } from "./useNavBar";
 import "./Navbar.css";
 import IconClose from "../assets/iconClose.svg?react";
 
-function Navbar() {
+function Navbar({ categories = [] }) {
   const { menuAbierto, toggleMenu, cerrarMenu } = useNavbar();
 
   return (
     <nav className="navbar">
-      <div className="hamburguesa" onClick={toggleMenu}>
-        ☰
-      </div>
+      <div className="hamburguesa" onClick={toggleMenu}>☰</div>
 
       <ul className={`barra ${menuAbierto ? "activo" : ""}`}>
         <div>
@@ -27,23 +25,13 @@ function Navbar() {
           </NavLink>
         </li>
 
-        <li className="barraItems">
-          <NavLink to="/remeras" onClick={cerrarMenu} className="barraLinks">
-            Remeras
-          </NavLink>
-        </li>
-
-        <li className="barraItems">
-          <NavLink to="/Abrigos" onClick={cerrarMenu} className="barraLinks">
-            Abrigos
-          </NavLink>
-        </li>
-
-        <li className="barraItems">
-          <NavLink to="/Zapatillas" onClick={cerrarMenu} className="barraLinks">
-            Zapatillas
-          </NavLink>
-        </li>
+        {categories.map((cat) => (
+          <li className="barraItems" key={cat}>
+            <NavLink to={`/categoria/${cat.toLowerCase()}`} onClick={cerrarMenu} className="barraLinks">
+              {cat}
+            </NavLink>
+          </li>
+        ))}
       </ul>
     </nav>
   );

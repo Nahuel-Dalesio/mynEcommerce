@@ -70,12 +70,12 @@ function Footer() {
       <div className='footer-legal'>
         <ul className='legalPadre'>
           <li className="centrar">
-              <Link to='/Terminos' className='legal'>
+              <Link to='/legal/terminos' className='legal'>
                 TÉRMINOS Y CONDICIONES
               </Link>
             </li>
             <li className='centrar'>
-              <Link to='/Privacidad' className='legal'>
+              <Link to='/legal/privacidad' className='legal'>
                 POLÍTICA DE PRIVACIDAD
               </Link>
             </li>

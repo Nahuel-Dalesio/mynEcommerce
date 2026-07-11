@@ -1,4 +1,4 @@
-.privacidad-container {
+.pagina-legal-container {
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
@@ -7,45 +7,49 @@
   line-height: 1.7;
 }
 
-.privacidad-container h1 {
+.pagina-legal-container h1 {
   text-align: center;
   margin-bottom: 10px;
   font-size: 2rem;
 }
 
-.privacidad-container .fecha {
+.pagina-legal-container .fecha {
   text-align: center;
   font-size: 0.9rem;
   color: #777;
   margin-bottom: 30px;
 }
 
-.privacidad-container section {
+.pagina-legal-container section {
   margin-bottom: 25px;
 }
 
-.privacidad-container h2 {
+.pagina-legal-container h2 {
   font-size: 1.2rem;
   margin-bottom: 8px;
   border-left: 4px solid #000;
   padding-left: 10px;
 }
 
-.privacidad-container ul {
+.pagina-legal-container p {
+  margin-bottom: 8px;
+}
+
+.pagina-legal-container ul {
   padding-left: 20px;
 }
 
-.privacidad-container li {
+.pagina-legal-container li {
   margin-bottom: 6px;
 }
 
-.privacidad-container hr {
+.pagina-legal-container hr {
   margin: 30px 0;
   border: none;
   border-top: 1px solid #ddd;
 }
 
-.privacidad-container .firma {
+.pagina-legal-container .firma {
   text-align: center;
   font-weight: bold;
   color: #555;
@@ -54,16 +58,16 @@
 /* Responsive */
 
 @media (max-width: 600px) {
-  .privacidad-container {
+  .pagina-legal-container {
     margin: 20px 10px;
     padding: 15px;
   }
 
-  .privacidad-container h1 {
+  .pagina-legal-container h1 {
     font-size: 1.6rem;
   }
 
-  .privacidad-container h2 {
+  .pagina-legal-container h2 {
     font-size: 1.05rem;
   }
 }
