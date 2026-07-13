@@ -19,15 +19,16 @@ async function obtenerProductosPorCategoria(categoria) {
       p.nombre,
       p.descripcion,
       p.precio,
-      p.categoria,
+      c.nombre AS categoria,
       p.activo,
       i.src AS imagen,
       i.esPrincipal
     FROM producto p
+    INNER JOIN categoria c ON c.idCategoria = p.idCategoria
     LEFT JOIN imagenesproducto i 
       ON i.idProducto = p.idProducto 
       AND i.esPrincipal = 1
-    WHERE LOWER(p.categoria) = LOWER(?) AND p.activo = 1
+    WHERE LOWER(c.nombre) = LOWER(?) AND p.activo = 1
   `;
 
   const [rows] = await pool.query(query, [categoria]);
@@ -41,11 +42,12 @@ async function obtenerProductosDestacados() {
       p.nombre,
       p.descripcion,
       p.precio,
-      p.categoria,
+      c.nombre AS categoria,
       p.activo,
       i.src AS imagen,
       i.esPrincipal
     FROM producto p
+    INNER JOIN categoria c ON c.idCategoria = p.idCategoria
     LEFT JOIN imagenesproducto i 
       ON i.idProducto = p.idProducto 
       AND i.esPrincipal = 1
@@ -78,12 +80,13 @@ async function obtenerProductoPorId(idProducto) {
       p.esDestacado,
       p.enOferta,
       p.precioOferta,
-      p.categoria,
+      c.nombre AS categoria,
       p.activo,
       ps.idProductoStock,
       ps.talle,
       ps.stock
     FROM producto p
+    INNER JOIN categoria c ON c.idCategoria = p.idCategoria
     INNER JOIN productostock ps 
       ON ps.IdProduct = p.idProducto
     WHERE p.idProducto = ? and p.activo = 1
@@ -94,18 +97,54 @@ async function obtenerProductoPorId(idProducto) {
 }
 async function obtenerCategorias() {
   const query = `
-    SELECT DISTINCT categoria
-    FROM producto
-    WHERE activo = 1
-    ORDER BY categoria ASC
+    SELECT DISTINCT c.nombre
+    FROM categoria c
+    INNER JOIN producto p ON p.idCategoria = c.idCategoria
+    WHERE p.activo = 1
+    ORDER BY c.nombre ASC
   `;
   const [rows] = await pool.query(query);
-  return rows.map((row) => row.categoria);
+  return rows.map((row) => row.nombre);
 }
-
+async function obtenerCategoriasCompletas() {
+  const query = `SELECT idCategoria, nombre FROM categoria ORDER BY nombre ASC`;
+  const [rows] = await pool.query(query);
+  return rows;
+}
+async function crearCategoria(nombre) {
+  const query = `INSERT INTO categoria (nombre) VALUES (?)`;
+  const [result] = await pool.query(query, [nombre]);
+  return result.insertId;
+}
 /* ===============================
    Rutas
 ================================ */
+router.post("/categorias", async (req, res) => {
+  try {
+    const { nombre } = req.body;
+    if (!nombre || !nombre.trim()) {
+      return res.status(400).json({ error: "El nombre de categoría es obligatorio" });
+    }
+    const idCategoria = await crearCategoria(nombre.trim());
+    res.status(201).json({ idCategoria, nombre: nombre.trim() });
+  } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Esa categoría ya existe" });
+    }
+    console.error(error);
+    res.status(500).json({ error: "Error DB" });
+  }
+});
+
+router.get("/categorias-admin", async (_req, res) => {
+  try {
+    const categorias = await obtenerCategoriasCompletas();
+    res.json(categorias);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error DB" });
+  }
+});
 
 router.get("/categoria", async (req, res) => {
   try {

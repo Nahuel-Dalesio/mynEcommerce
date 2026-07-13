@@ -2,8 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import "./formProducto.css";
+import { useCategoriasAdmin } from "../hooks/useCategoriasAdmin";
+import { BASE_URL } from "../config";
 
 const FormProducto = ({ producto, onSubmit, onCancel }) => {
+  const { categorias:categoriasApi } = useCategoriasAdmin();
+  const [categoriasLocal, setCategoriasLocal] = useState([]);
+  const [creandoCategoria, setCreandoCategoria] = useState(false);
+  const [nuevaCategoria, setNuevaCategoria] = useState("");
+
+  useEffect(() => {
+    setCategoriasLocal(categoriasApi);
+  }, [categoriasApi]);
+
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -11,7 +22,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
     esDestacado: 0,
     enOferta: 0,
     precioOferta: "",
-    categoria: "",
+    idCategoria: "",
     imagenes: [],
   });
 
@@ -24,11 +35,45 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         esDestacado: producto.esDestacado || 0,
         enOferta: producto.enOferta || 0,
         precioOferta: producto.precioOferta || "",
-        categoria: producto.categoria || "",
+        idCategoria: producto.idCategoria || "",
         imagenes: Array.isArray(producto.imagenes) ? producto.imagenes : [],
       });
     }
   }, [producto]);
+
+  const handleCategoriaChange = (e) => {
+    const value = e.target.value;
+    if (value === "__nueva__") {
+      setCreandoCategoria(true);
+      setFormData((prev) => ({ ...prev, idCategoria: "" }));
+    } else {
+      setCreandoCategoria(false);
+      setFormData((prev) => ({ ...prev, idCategoria: value }));
+    }
+  };
+
+  const handleCrearCategoria = async () => {
+    if (!nuevaCategoria.trim()) return;
+    try {
+      const res = await fetch(`${BASE_URL}/api/productos/categorias`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre: nuevaCategoria.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Error al crear categoría");
+        return;
+      }
+      // Agregamos la nueva categoría a la lista local y la seleccionamos
+      setCategoriasLocal((prev) => [...prev, data]);
+      setFormData((prev) => ({ ...prev, idCategoria: data.idCategoria }));
+      setCreandoCategoria(false);
+      setNuevaCategoria("");
+    } catch (err) {
+      alert("Error de conexión al crear categoría");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,7 +86,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Basic validation
-    if (!formData.nombre || !formData.precio || !formData.categoria) {
+    if (!formData.nombre || !formData.precio || !formData.idCategoria) {
       alert(
         "Por favor completa los campos obligatorios (Nombre, Precio, Categoría)",
       );
@@ -103,17 +148,34 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         <div>
           <label>Categoría:*</label>
           <select
-            name="categoria"
-            value={formData.categoria}
-            onChange={handleChange}
+            name="idCategoria"
+            value={formData.idCategoria}
+            onChange={handleCategoriaChange}
             required
             style={{ width: "100%" }}
           >
             <option value="">Selecciona una...</option>
-            <option value="Remeras">Remeras</option>
-            <option value="Abrigos">Abrigos</option>
-            <option value="Zapatillas">Zapatillas</option>
+            {categoriasLocal.map((cat) => (
+              <option key={cat.idCategoria} value={cat.idCategoria}>
+                {cat.nombre}
+              </option>
+            ))}
+            <option value="__nueva__">+ Crear nueva categoría</option>
           </select>
+          {creandoCategoria && (
+            <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
+              <input
+                type="text"
+                placeholder="Nombre de la nueva categoría"
+                value={nuevaCategoria}
+                onChange={(e) => setNuevaCategoria(e.target.value)}
+                style={{ flex: 1 }}
+              />
+              <button type="button" onClick={handleCrearCategoria}>
+                Crear
+              </button>
+            </div>
+          )}
         </div>
         <div>
           <label>Imágenes (ruta en /productos)</label>

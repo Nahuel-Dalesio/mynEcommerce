@@ -1,29 +1,37 @@
 import pool from "../conexion.js";
 
 export const getAllProducts = async () => {
-  const [rows] = await pool.query("SELECT * FROM producto");
+  const [rows] = await pool.query(`
+    SELECT p.*, c.nombre AS categoria
+    FROM producto p
+    INNER JOIN categoria c ON c.idCategoria = p.idCategoria
+  `);
   return rows;
 };
 
 export const getProductById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM producto WHERE idProducto = ?", [id]);
+  const [rows] = await pool.query(`
+    SELECT p.*, c.nombre AS categoria
+    FROM producto p
+    INNER JOIN categoria c ON c.idCategoria = p.idCategoria
+    WHERE p.idProducto = ?
+  `, [id]);
   return rows[0];
 };
-
 export const createProduct = async (product) => {
-  const { nombre, descripcion, precio, esDestacado, enOferta, precioOferta, categoria } = product;
+  const { nombre, descripcion, precio, esDestacado, enOferta, precioOferta, idCategoria } = product;
   const [result] = await pool.query(
-    "INSERT INTO producto (nombre, descripcion, precio, esDestacado, enOferta, precioOferta, categoria, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
-    [nombre, descripcion, precio, esDestacado, enOferta, precioOferta, categoria]
+    "INSERT INTO producto (nombre, descripcion, precio, esDestacado, enOferta, precioOferta, idCategoria, activo) VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
+    [nombre, descripcion, precio, esDestacado, enOferta, precioOferta, idCategoria]
   );
   return result.insertId;
 };
 
 export const updateProduct = async (id, product) => {
-  const { nombre, descripcion, precio, esDestacado, enOferta, precioOferta, categoria } = product;
+  const { nombre, descripcion, precio, esDestacado, enOferta, precioOferta, idCategoria } = product;
   const [result] = await pool.query(
-    "UPDATE producto SET nombre = ?, descripcion = ?, precio = ?, esDestacado = ?, enOferta = ?, precioOferta = ?, categoria = ? WHERE idProducto = ?",
-    [nombre, descripcion, precio, esDestacado, enOferta, precioOferta, categoria, id]
+    "UPDATE producto SET nombre = ?, descripcion = ?, precio = ?, esDestacado = ?, enOferta = ?, precioOferta = ?, idCategoria = ? WHERE idProducto = ?",
+    [nombre, descripcion, precio, esDestacado, enOferta, precioOferta, idCategoria, id]
   );
   return result.affectedRows;
 };

@@ -13,8 +13,8 @@ import {
 
 // Helper for validating product data
 const validateProduct = (data) => {
-  const { nombre, precio, categoria } = data;
-  if (!nombre || !precio || !categoria) {
+  const { nombre, precio, idCategoria } = data;
+  if (!nombre || !precio || !idCategoria) {
     return "Los campos nombre, precio y categoría son obligatorios.";
   }
   return null;
