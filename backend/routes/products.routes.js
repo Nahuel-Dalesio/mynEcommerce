@@ -1,6 +1,6 @@
 // routes/products.routes.js
 import { Router } from "express";
-import { getAll, getById, create, update, remove } from "../controllers/products.controller.js";
+import { getAll, getById, create, update, toggleActivo} from "../controllers/products.controller.js";
 import { verifyToken, isAdmin } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -12,6 +12,5 @@ router.get("/products/:id", getById);
 // Protegidas (Solo Admin)
 router.post("/products", [verifyToken, isAdmin], create);
 router.put("/products/:id", [verifyToken, isAdmin], update);
-router.delete("/products/:id", [verifyToken, isAdmin], remove);
-
+router.patch("/products/:id/activo", [verifyToken, isAdmin], toggleActivo);
 export default router;

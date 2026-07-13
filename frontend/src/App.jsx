@@ -1,125 +1,29 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Header from './componentes/Header.jsx';
 import CrearUsuarioModal from './componentes/CrearUsuario.jsx';
 import Carrito from './componentes/Carrito.jsx';
 import Navbar from './componentes/Navbar.jsx';
-import { Routes, Route } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2';
 import GaleriaModal from './componentes/GaleriaModal.jsx';
 import Footer from './componentes/Footer.jsx';
-import ProtectedRoute from "./componentes/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import ScrollToTop from "./componentes/ScrollToTop";
-import { BASE_URL } from "./config";
 import AppRoutes from "./routes/AppRoutes";
 import { useCategorias } from "./hooks/useCategorias";
-
+import { useCarrito } from "./hooks/useCarrito";
+import { useGaleria } from "./hooks/useGaleria";
 
 function App() {
-  const [imagenesGaleria, setImagenesGaleria] = useState([]);
-  const [mostrarGaleria, setMostrarGaleria] = useState(false);
   const [mostrarModal, setMostrarModal] = useState(null);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
   const { categorias } = useCategorias();
-  const toggleCarrito = () => {
-    setMostrarCarrito((prev) => !prev);
-  };
+  const { carrito, setCarrito, agregarAlCarrito, eliminarDelCarrito, totalCarrito } = useCarrito();
+  const { imagenesGaleria, mostrarGaleria, abrirGaleria, cerrarGaleria } = useGaleria();
   const toggleButtonRef = useRef(null);
 
-  const [carrito, setCarrito] = useState(() => {
-    const guardado = localStorage.getItem('carrito');
-    return guardado ? JSON.parse(guardado) : [];
-  });
-  useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
-  
-  const eliminarDelCarrito = (idProducto, talle) => {
-    setCarrito((prev) =>
-      prev.flatMap((p) => {
-        if (p.idProducto !== idProducto || p.talle !== talle) return p;
-        if (p.cantidad > 1) {
-          return { ...p, cantidad: p.cantidad - 1 };
-        }
-        return [];
-      }),
-    );
-  };
-
-  const cerrarCarrito = () => {
-    setMostrarCarrito(false);
-  };
-
-  const agregarAlCarrito = (producto, talle, cantidad, stockTalle) => {
-    setCarrito((prev) => {
-      const existe = prev.find(
-        (p) => p.idProducto === producto.idProducto && p.talle === talle,
-      );
-
-      if (existe) {
-        if (existe.cantidad + cantidad > stockTalle) {
-          toast.error(`No hay suficiente stock de "${producto.nombre}"`, {
-            toastId: `${producto.idProducto}-${talle}`,
-            autoClose: 500,
-            hideProgressBar: true,
-          });
-          return prev;
-        }
-        toast.info(`Se agregó otra unidad de "${producto.nombre}"`, {
-          toastId: `${producto.idProducto}-${talle}`, // id único
-          autoClose: 500,
-          hideProgressBar: true,
-        });
-        return prev.map((p) =>
-          p.idProducto === producto.idProducto && p.talle === talle
-            ? { ...p, cantidad: p.cantidad + cantidad }
-            : p,
-        );
-      }
-      toast.success(`Producto "${producto.nombre}" agregado al carrito`, {
-        toastId: `${producto.idProducto}-${talle}`,
-        autoClose: 500,
-        hideProgressBar: true,
-      });
-      return [
-        ...prev,
-        {
-          idProducto: producto.idProducto,
-          nombre: producto.nombre,
-          precio: producto.precioOferta ?? producto.precio,
-          talle,
-          cantidad,
-          stock: stockTalle,
-          imagen: producto.imagenes.find((img) => img.esPrincipal === 1)?.src,
-        },
-      ];
-    });
-  };
-
-  const totalCarrito = carrito.reduce(
-    (acc, prod) => acc + prod.precio * prod.cantidad,
-    0,
-  );
-
-  const abrirGaleria = async (producto) => {
-    // Si ya vienen imágenes (raro)
-    if (Array.isArray(producto.imagenes)) {
-      setImagenesGaleria(producto.imagenes);
-    } else {
-      // pedirlas al backend
-      const res = await fetch(
-        `${BASE_URL}/api/productos/imagenes/${producto.idProducto}`,
-      );
-      const data = await res.json();
-      console.log("Imagenes backend:", data);
-
-      setImagenesGaleria(data.map((img) => img.src));
-    }
-
-    setMostrarGaleria(true);
-  };
+  const toggleCarrito = () => setMostrarCarrito((prev) => !prev);
+  const cerrarCarrito = () => setMostrarCarrito(false);
 
   return (
     <AuthProvider>
@@ -139,9 +43,6 @@ function App() {
       {mostrarModal === 'crear' && (
         <CrearUsuarioModal onClose={() => setMostrarModal(null)} />
       )}
-      {/* {mostrarModal === "login" && (
-        <IniciarSesionModal onClose={() => setMostrarModal(null)} />
-      )} */}
       <Carrito
         abierto={mostrarCarrito}
         carrito={carrito}
@@ -152,13 +53,9 @@ function App() {
       />
       <ScrollToTop />
       {mostrarGaleria && (
-        <GaleriaModal
-          imagenes={imagenesGaleria}
-          onClose={() => setMostrarGaleria(false)}
-        />
+        <GaleriaModal imagenes={imagenesGaleria} onClose={cerrarGaleria} />
       )}
-
-      <Footer />
+      <Footer categories={categorias} />
       <ToastContainer />
     </AuthProvider>
   );

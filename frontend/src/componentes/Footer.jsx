@@ -1,28 +1,24 @@
 import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import LogoInstagram from '../assets/logoInstagram.svg?react';
 import LogoFacebook from '../assets/logoFacebook.svg?react';
 import LogoWhatsapp from '../assets/logowhatsapp.svg?react';
 import './Footer.css';
 
-function Footer() {
+function Footer({ categories = [] }) {
   return (
     <footer className='footer'>
       <ul className='footer-top'>
         <li className='logo deco'>
           <Link to='/'>Inicio</Link>
         </li>
-        <li className='logo deco'>
-          <Link to='/Remeras'>Remeras</Link>
-        </li>
-        <li className='logo deco'>
-          <Link to='/Abrigos'>Abrigos</Link>
-        </li>
-        <li className='logo deco'>
-          <Link to='/Zapatillas'>Zapatillas</Link>
-        </li>
-        {/* <li className="logo deco">
-          <Link to="/Contacto">Contacto</Link>
-        </li> */}
+        {categories.map((cat) => (
+          <li className="logo deco" key={cat}>
+            <NavLink to={`/categoria/${cat.toLowerCase()}`} className="barraLinks">
+              {cat}
+            </NavLink>
+          </li>
+        ))}
       </ul>
 
       <div className='footer-brand'>

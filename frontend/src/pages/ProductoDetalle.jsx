@@ -42,7 +42,7 @@ function ProductoDetalle({ agregarAlCarrito, carrito }) {
 }, [producto]);
 
   if (error) return <p>{error}</p>;
-  if (!producto) return <p>Cargando...</p>;
+  if (!producto) return <p>No hay producto disponible</p>;
 
 
   const obtenerTalle = (talle) =>

@@ -4,7 +4,7 @@ import {
   getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct,
+  setProductActivo,
 } from "../models/products.model.js";
 import {
   createImagenProducto,
@@ -99,13 +99,17 @@ export const update = async (req, res) => {
   }
 };
 
-export const remove = async (req, res) => {
+
+
+export const toggleActivo = async (req, res) => {
   try {
-    const affectedRows = await deleteProduct(req.params.id);
+    const { id } = req.params;
+    const { activo } = req.body; // true o false
+    const affectedRows = await setProductActivo(id, activo);
     if (affectedRows === 0) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
-    res.json({ message: "Producto eliminado correctamente" });
+    res.json({ message: activo ? "Producto reactivado" : "Producto desactivado" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

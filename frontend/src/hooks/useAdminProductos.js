@@ -73,29 +73,30 @@ export function useAdminProductos() {
       setLoading(false);
     }
   };
-
-  const deleteItem = async (id) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${BASE_URL}/api/products/${id}`, {
-        method: "DELETE",
-        headers: { 
-          "Authorization": `Bearer ${token}`
-        },
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error deleting product");
-      }
-      return await response.json();
-    } catch (err) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
+  const toggleActivoItem = async (id, activo) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const response = await fetch(`${BASE_URL}/api/products/${id}/activo`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ activo }),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al actualizar estado del producto");
     }
-  };
+    return await response.json();
+  } catch (err) {
+    setError(err.message);
+    throw err;
+  } finally {
+    setLoading(false);
+  }
+};
 
-  return { loading, error, fetchItems, createItem, updateItem, deleteItem };
+ return { loading, error, fetchItems, createItem, updateItem, toggleActivoItem };
 }

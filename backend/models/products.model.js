@@ -1,13 +1,12 @@
-// models/products.model.js
 import pool from "../conexion.js";
 
 export const getAllProducts = async () => {
-  const [rows] = await pool.query("SELECT * FROM producto WHERE activo = 1");
+  const [rows] = await pool.query("SELECT * FROM producto");
   return rows;
 };
 
 export const getProductById = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM producto WHERE idProducto = ? AND activo = 1", [id]);
+  const [rows] = await pool.query("SELECT * FROM producto WHERE idProducto = ?", [id]);
   return rows[0];
 };
 
@@ -29,8 +28,10 @@ export const updateProduct = async (id, product) => {
   return result.affectedRows;
 };
 
-export const deleteProduct = async (id) => {
-  // Soft delete setting activo = 0
-  const [result] = await pool.query("UPDATE producto SET activo = 0 WHERE idProducto = ?", [id]);
+export const setProductActivo = async (id, activo) => {
+  const [result] = await pool.query(
+    "UPDATE producto SET activo = ? WHERE idProducto = ?",
+    [activo ? 1 : 0, id]
+  );
   return result.affectedRows;
 };
