@@ -1,5 +1,3 @@
-// controllers/auth.controller.js
-
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { findUserByEmail, createUser } from "../models/auth.model.js";
@@ -13,9 +11,10 @@ if (!SECRET) {
 }
 
 export const register = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email y contraseña requeridos" });
+  const { email, password, nombre, apellido, telefono } = req.body;
+
+  if (!email || !password || !nombre || !telefono) {
+    return res.status(400).json({ message: "Email, contraseña, nombre y teléfono son requeridos" });
   }
 
   try {
@@ -25,15 +24,11 @@ export const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const idUsuario = await createUser(email, hashedPassword);
+    const idUsuario = await createUser({ email, hashedPassword, nombre, apellido, telefono });
 
-    res
-      .status(201)
-      .json({ message: "Usuario creado correctamente", idUsuario });
+    res.status(201).json({ message: "Usuario creado correctamente", idUsuario });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al registrar usuario", error: error.message });
+    res.status(500).json({ message: "Error al registrar usuario", error: error.message });
   }
 };
 
@@ -59,7 +54,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.idUsuario, email: user.email, rol: user.rol },
       SECRET,
-      { expiresIn: "8h" },
+      { expiresIn: "8h" }
     );
 
     res.json({
@@ -67,12 +62,10 @@ export const login = async (req, res) => {
       token,
       user: {
         email: user.email,
-        rol: user.rol,
-      },
+        rol: user.rol
+      }
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al iniciar sesión", error: error.message });
+    res.status(500).json({ message: "Error al iniciar sesión", error: error.message });
   }
 };
