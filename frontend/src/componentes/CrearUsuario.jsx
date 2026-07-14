@@ -1,28 +1,49 @@
 import { useState } from "react";
-// TODO: Terminar la implementación del modal para crear usuario al finalizar el proyecto.
-function CrearUsuarioModal({ onClose }) {
-  const [nombre, setNombre] = useState("");
-  const [password, setPassword] = useState("");
-  const [telefono, setTelefono] = useState("");
+import { BASE_URL } from "../config";
 
-  const handleCrear = () => {
-    // Validación simple
-    if (!nombre || !password || !telefono) {
-      alert("Completa todos los campos");
+function CrearUsuarioModal({ onClose }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleCrear = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!email || !password || !nombre || !telefono) {
+      setError("Completá los campos obligatorios (email, contraseña, nombre y teléfono)");
       return;
     }
 
-    // Simulación de guardado (después va API)
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    usuarios.push({ nombre, password, telefono });
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE_URL}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, nombre, apellido, telefono }),
+      });
 
-    // Cerrar modal
-    onClose();
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Error al crear usuario");
+        return;
+      }
+
+      onClose();
+    } catch (err) {
+      setError("Error de conexión con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form className="modal">  
+    <form className="modal" onSubmit={handleCrear}>
       <div className="modal-content">
         <span className="close" onClick={onClose}>
           &times;
@@ -30,12 +51,14 @@ function CrearUsuarioModal({ onClose }) {
 
         <h2>Crear Usuario</h2>
 
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
         <input
           className="input"
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
@@ -49,13 +72,29 @@ function CrearUsuarioModal({ onClose }) {
         <input
           className="input"
           type="text"
-          placeholder="Telefono"
+          placeholder="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+
+        <input
+          className="input"
+          type="text"
+          placeholder="Apellido"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+        />
+
+        <input
+          className="input"
+          type="text"
+          placeholder="Teléfono"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
         />
 
-        <button className="btnCrear" onClick={handleCrear}>
-          Crear
+        <button className="btnCrear" type="submit" disabled={loading}>
+          {loading ? "Creando..." : "Crear"}
         </button>
       </div>
     </form>
