@@ -1,3 +1,5 @@
+//frontend/src/hooks/usePedido.js
+
 import { useState } from "react";
 import { BASE_URL } from "../config";
 
@@ -23,9 +25,6 @@ function usePedido() {
       });
 
       const data = await res.json();
-      console.log("STATUS:", res.status);
-      console.log("RESPUESTA BACKEND:", data);
-      
 
       if (!res.ok) {
         throw new Error(data.error || "Error al guardar pedido");

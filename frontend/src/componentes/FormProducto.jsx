@@ -1,12 +1,14 @@
 //componentes/FormProducto.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "./formProducto.css";
 import { useCategoriasAdmin } from "../hooks/useCategoriasAdmin";
 import { BASE_URL } from "../config";
 
 const FormProducto = ({ producto, onSubmit, onCancel }) => {
-  const { categorias:categoriasApi } = useCategoriasAdmin();
+  const { token } = useContext(AuthContext);
+  const { categorias: categoriasApi } = useCategoriasAdmin();
   const [categoriasLocal, setCategoriasLocal] = useState([]);
   const [creandoCategoria, setCreandoCategoria] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState("");
@@ -55,9 +57,12 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
   const handleCrearCategoria = async () => {
     if (!nuevaCategoria.trim()) return;
     try {
-      const res = await fetch(`${BASE_URL}/api/productos/categorias`, {
+      const res = await fetch(`${BASE_URL}/api/categorias`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ nombre: nuevaCategoria.trim() }),
       });
       const data = await res.json();
@@ -65,7 +70,6 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         alert(data.error || "Error al crear categoría");
         return;
       }
-      // Agregamos la nueva categoría a la lista local y la seleccionamos
       setCategoriasLocal((prev) => [...prev, data]);
       setFormData((prev) => ({ ...prev, idCategoria: data.idCategoria }));
       setCreandoCategoria(false);
