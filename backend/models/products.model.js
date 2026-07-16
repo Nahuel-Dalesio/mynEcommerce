@@ -1,4 +1,5 @@
 import pool from "../conexion.js";
+import { getStockByProducto } from "./stock.model.js";
 
 // --- Lectura pública ---
 
@@ -23,6 +24,13 @@ export const getProductById = async (id) => {
 
   const imagenes = await getImagesByProducto(id);
   producto.imagenes = imagenes.map((img) => img.src);
+
+  const stockRows = await getStockByProducto(id);
+  producto.stock = stockRows.map((row) => ({
+    talle: row.talle,
+    stock: row.stock,
+  }));
+  
 
   return producto;
 };
