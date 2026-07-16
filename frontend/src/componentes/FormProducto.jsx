@@ -1,5 +1,3 @@
-//componentes/FormProducto.jsx
-
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import "./formProducto.css";
@@ -12,10 +10,29 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
   const [categoriasLocal, setCategoriasLocal] = useState([]);
   const [creandoCategoria, setCreandoCategoria] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState("");
+  const [imagenesDisponibles, setImagenesDisponibles] = useState([]);
+  const [cargandoImagenes, setCargandoImagenes] = useState(true);
 
   useEffect(() => {
     setCategoriasLocal(categoriasApi);
   }, [categoriasApi]);
+
+  useEffect(() => {
+    const fetchImagenes = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/products/imagenes-disponibles`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok) setImagenesDisponibles(data);
+      } catch (err) {
+        console.error("No se pudieron cargar las imágenes disponibles", err);
+      } finally {
+        setCargandoImagenes(false);
+      }
+    };
+    fetchImagenes();
+  }, [token]);
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -182,21 +199,71 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
           )}
         </div>
         <div>
-          <label>Imágenes (ruta en /productos)</label>
+          <label>Imágenes</label>
 
           {formData.imagenes.map((img, index) => (
-            <input
+            <div
               key={index}
-              type="text"
-              placeholder="/productos/productos/remera1.jpg"
-              value={img}
-              onChange={(e) => {
-                const nuevas = [...formData.imagenes];
-                nuevas[index] = e.target.value;
-                setFormData({ ...formData, imagenes: nuevas });
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginBottom: "5px",
               }}
-              style={{ width: "100%", marginBottom: "5px" }}
-            />
+            >
+              {img && (
+                <img
+                  src={img}
+                  alt={`Imagen ${index + 1}`}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.display = "block";
+                  }}
+                  style={{
+                    width: "48px",
+                    height: "48px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    flexShrink: 0,
+                  }}
+                />
+              )}
+              <select
+                value={img}
+                onChange={(e) => {
+                  const nuevas = [...formData.imagenes];
+                  nuevas[index] = e.target.value;
+                  setFormData({ ...formData, imagenes: nuevas });
+                }}
+                style={{ width: "100%" }}
+              >
+                <option value="">
+                  {cargandoImagenes ? "Cargando imágenes..." : "Selecciona una imagen..."}
+                </option>
+                {img && !imagenesDisponibles.includes(img) && (
+                  <option value={img}>{img} (no encontrada en el repo)</option>
+                )}
+                {imagenesDisponibles.map((ruta) => (
+                  <option key={ruta} value={ruta}>
+                    {ruta}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => {
+                  const nuevas = formData.imagenes.filter((_, i) => i !== index);
+                  setFormData({ ...formData, imagenes: nuevas });
+                }}
+                title="Quitar imagen"
+                style={{ flexShrink: 0 }}
+              >
+                ✕
+              </button>
+            </div>
           ))}
 
           <button
