@@ -24,6 +24,22 @@ export function useAdminProductos() {
     }
   }, []);
 
+  const fetchItemById = useCallback(async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BASE_URL}/api/products/${id}`);
+      if (!response.ok) throw new Error("Error fetching product");
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const createItem = async (product) => {
     setLoading(true);
     setError(null);
@@ -98,5 +114,5 @@ export function useAdminProductos() {
   }
 };
 
- return { loading, error, fetchItems, createItem, updateItem, toggleActivoItem };
+ return { loading, error, fetchItems, fetchItemById, createItem, updateItem, toggleActivoItem };
 }

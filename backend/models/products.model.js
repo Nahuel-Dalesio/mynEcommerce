@@ -18,7 +18,13 @@ export const getProductById = async (id) => {
     INNER JOIN categoria c ON c.idCategoria = p.idCategoria
     WHERE p.idProducto = ?
   `, [id]);
-  return rows[0];
+  const producto = rows[0];
+  if (!producto) return producto;
+
+  const imagenes = await getImagesByProducto(id);
+  producto.imagenes = imagenes.map((img) => img.src);
+
+  return producto;
 };
 
 export const getProductDetailById = async (idProducto) => {

@@ -4,7 +4,7 @@ import FormProducto from "../componentes/FormProducto";
 import Swal from "sweetalert2";
 
 const AdminProductos = () => {
-  const { loading, error, fetchItems, createItem, updateItem, toggleActivoItem } = useAdminProductos();
+  const { loading, error, fetchItems, fetchItemById, createItem, updateItem, toggleActivoItem } = useAdminProductos();
   const [productos, setProductos] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -18,9 +18,16 @@ const AdminProductos = () => {
     loadProducts();
   }, [fetchItems]);
 
-  const handleEdit = (product) => {
-    setEditingProduct(product);
-    setShowForm(true);
+  const handleEdit = async (product) => {
+    try {
+      // El objeto de la tabla (fetchItems) no trae imágenes, así que
+      // pedimos el detalle completo del producto antes de abrir el form.
+      const productoCompleto = await fetchItemById(product.idProducto);
+      setEditingProduct(productoCompleto);
+      setShowForm(true);
+    } catch (err) {
+      Swal.fire("Error", "No se pudo cargar el producto para editar", "error");
+    }
   };
 
   const handleCreate = () => {
@@ -95,7 +102,9 @@ const AdminProductos = () => {
               <tr style={{ background: "#eee" }}>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>ID</th>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>Nombre</th>
+                <th style={{ padding: "10px", border: "1px solid #ccc" }}>Descripción</th>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>Precio</th>
+                <th style={{ padding: "10px", border: "1px solid #ccc" }}>Precio de Oferta</th>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>Categoría</th>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>Estado</th>
                 <th style={{ padding: "10px", border: "1px solid #ccc" }}>Acciones</th>
@@ -106,7 +115,9 @@ const AdminProductos = () => {
                 <tr key={prod.idProducto}>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>{prod.idProducto}</td>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>{prod.nombre}</td>
+                  <td style={{ padding: "10px", border: "1px solid #ccc" }}>{prod.descripcion}</td>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>${prod.precio}</td>
+                  <td style={{ padding: "10px", border: "1px solid #ccc" }}>${prod.precioOferta}</td>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>{prod.categoria}</td>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>
                     <span style={{

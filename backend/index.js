@@ -5,7 +5,7 @@ import productosRoutes from "./routes/productos.js";
 import { fileURLToPath } from "url";
 import pedidosRoutes from "./routes/pedidos.js";
 import dotenv from "dotenv";
-import productsRoutes from "./routes/products.routes.js";
+import productsRoutes from "./routes/products.js";
 import authRoutes from "./routes/auth.routes.js";
 
 dotenv.config();

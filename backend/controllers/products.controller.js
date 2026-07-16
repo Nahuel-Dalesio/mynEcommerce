@@ -16,6 +16,14 @@ import {
   createImagenProducto,
   deleteImagenesByProducto,
 } from "../models/imagenesProducto.model.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// backend/controllers -> subir 2 niveles a la raiz del repo -> frontend/public/productos
+const CARPETA_IMAGENES = path.join(__dirname, "../../frontend/public/productos");
+const EXTENSIONES_VALIDAS = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 
 const validateProduct = (data) => {
   const { nombre, precio, idCategoria } = data;
@@ -109,6 +117,30 @@ export const toggleActivo = async (req, res) => {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
     res.json({ message: activo ? "Producto activado" : "Producto desactivado" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// --- Imágenes disponibles en el repo (admin) ---
+
+export const getImagenesDisponibles = async (_req, res) => {
+  try {
+    if (!fs.existsSync(CARPETA_IMAGENES)) {
+      return res.status(500).json({
+        error: "No se encontró la carpeta de imágenes en el servidor",
+        rutaEsperada: CARPETA_IMAGENES,
+      });
+    }
+
+    const archivos = fs.readdirSync(CARPETA_IMAGENES);
+    const imagenes = archivos
+      .filter((archivo) =>
+        EXTENSIONES_VALIDAS.includes(path.extname(archivo).toLowerCase()),
+      )
+      .map((archivo) => `/productos/${archivo}`);
+
+    res.json(imagenes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
