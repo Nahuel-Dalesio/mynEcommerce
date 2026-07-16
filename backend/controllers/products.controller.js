@@ -16,6 +16,9 @@ import {
   createImagenProducto,
   deleteImagenesByProducto,
 } from "../models/imagenesProducto.model.js";
+import {
+  upsertStockRow,
+} from "../models/stock.model.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -74,6 +77,15 @@ export const create = async (req, res) => {
         });
       }
     }
+    if (req.body.stock && Array.isArray(req.body.stock)) {
+      for (const item of req.body.stock) {
+        await upsertStockRow({
+          idProducto,
+          talle: item.talle,
+          stock: Number(item.stock) || 0,
+        });
+      }
+    }
     res.status(201).json({
       message: "Producto creado correctamente",
       id: idProducto,
@@ -99,6 +111,15 @@ export const update = async (req, res) => {
           src: imagenesValidas[i],
           esPrincipal: i === 0,
           idProducto: id,
+        });
+      }
+    }
+    if (req.body.stock && Array.isArray(req.body.stock)) {
+      for (const item of req.body.stock) {
+        await upsertStockRow({
+          idProducto: id,
+          talle: item.talle,
+          stock: Number(item.stock) || 0,
         });
       }
     }

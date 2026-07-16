@@ -4,6 +4,9 @@ import "./formProducto.css";
 import { useCategoriasAdmin } from "../hooks/useCategoriasAdmin";
 import { BASE_URL } from "../config";
 
+// Mismo set fijo de talles que usa ProductoDetalle.jsx
+const TALLES = ["S", "M", "L", "XL", "XXL"];
+
 const FormProducto = ({ producto, onSubmit, onCancel }) => {
   const { token } = useContext(AuthContext);
   const { categorias: categoriasApi } = useCategoriasAdmin();
@@ -43,10 +46,22 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
     precioOferta: "",
     idCategoria: "",
     imagenes: [],
+    stock: TALLES.map((talle) => ({ talle, stock: 0 })),
   });
 
   useEffect(() => {
     if (producto) {
+      // Partimos de los 5 talles en 0 y pisamos con lo que venga del
+      // producto (si edita uno que ya tiene stock cargado para algún talle).
+      const stockPorTalle = TALLES.map((talle) => {
+        const existente = Array.isArray(producto.stock)
+          ? producto.stock.find(
+              (s) => s.talle.trim().toUpperCase() === talle,
+            )
+          : null;
+        return { talle, stock: existente ? existente.stock : 0 };
+      });
+
       setFormData({
         nombre: producto.nombre || "",
         descripcion: producto.descripcion || "",
@@ -56,6 +71,7 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         precioOferta: producto.precioOferta || "",
         idCategoria: producto.idCategoria || "",
         imagenes: Array.isArray(producto.imagenes) ? producto.imagenes : [],
+        stock: stockPorTalle,
       });
     }
   }, [producto]);
@@ -120,6 +136,10 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
         formData.enOferta === 1 && formData.precioOferta
           ? Number(formData.precioOferta)
           : null,
+      stock: formData.stock.map((item) => ({
+        talle: item.talle,
+        stock: item.stock === "" ? 0 : Number(item.stock),
+      })),
     };
 
     onSubmit(product);
@@ -278,6 +298,41 @@ const FormProducto = ({ producto, onSubmit, onCancel }) => {
           >
             + Agregar imagen
           </button>
+        </div>
+        <div>
+          <label>Stock por talle</label>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "12px",
+              marginTop: "6px",
+            }}
+          >
+            {formData.stock.map((item) => (
+              <div
+                key={item.talle}
+                style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+              >
+                <label style={{ fontSize: "0.85rem" }}>{item.talle}</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={item.stock}
+                  onChange={(e) => {
+                    const nuevoValor = e.target.value;
+                    const nuevoStock = formData.stock.map((s) =>
+                      s.talle === item.talle
+                        ? { ...s, stock: nuevoValor === "" ? "" : Number(nuevoValor) }
+                        : s,
+                    );
+                    setFormData({ ...formData, stock: nuevoStock });
+                  }}
+                  style={{ width: "70px" }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         <div className="checkbox-row">
           <label>
