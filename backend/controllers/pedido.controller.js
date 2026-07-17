@@ -1,4 +1,11 @@
-import { crearPedido, actualizarEstadoPedido, obtenerPedidos } from "../models/pedido.model.js";
+//backend/controllers/pedido.controller.js
+import {
+  crearPedido,
+  actualizarEstadoPedido,
+  obtenerPedidos,
+  obtenerEstadoPedido,
+  TRANSICIONES_VALIDAS,
+} from "../models/pedido.model.js";
 
 export const create = async (req, res) => {
   const { cliente, carrito, total } = req.body;
@@ -22,16 +29,24 @@ export const updateEstado = async (req, res) => {
     const { id } = req.params;
     const { estado } = req.body;
 
-    const estadosValidos = ["pendiente", "confirmado", "cancelado", "entregado"];
+    const estadosValidos = ["pendiente", "confirmado", "entregado", "cancelado"];
     if (!estadosValidos.includes(estado)) {
       return res.status(400).json({ error: "Estado inválido" });
     }
 
-    const affectedRows = await actualizarEstadoPedido(id, estado);
-    if (affectedRows === 0) {
+    const estadoActual = await obtenerEstadoPedido(id);
+    if (!estadoActual) {
       return res.status(404).json({ error: "Pedido no encontrado" });
     }
 
+    const transicionesPermitidas = TRANSICIONES_VALIDAS[estadoActual] || [];
+    if (!transicionesPermitidas.includes(estado)) {
+      return res.status(400).json({
+        error: `No se puede pasar de "${estadoActual}" a "${estado}"`,
+      });
+    }
+
+    await actualizarEstadoPedido(id, estado);
     res.json({ message: `Pedido actualizado a ${estado}` });
   } catch (error) {
     console.error("Error al actualizar estado:", error);

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAdminProductos } from "../hooks/useAdminProductos";
 import FormProducto from "../componentes/FormProducto";
 import Swal from "sweetalert2";
@@ -20,8 +21,6 @@ const AdminProductos = () => {
 
   const handleEdit = async (product) => {
     try {
-      // El objeto de la tabla (fetchItems) no trae imágenes, así que
-      // pedimos el detalle completo del producto antes de abrir el form.
       const productoCompleto = await fetchItemById(product.idProducto);
       setEditingProduct(productoCompleto);
       setShowForm(true);
@@ -85,7 +84,30 @@ const AdminProductos = () => {
 
   return (
     <div className="admin-container" style={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h2 style={{ marginBottom: "20px" }}>Administración de Productos</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Administración de Productos</h2>
+        <Link
+          to="/admin/pedidos"
+          style={{
+            padding: "10px 20px",
+            background: "#6c757d",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontSize: "0.95rem",
+          }}
+        >
+          Ir a Gestión de Pedidos →
+        </Link>
+      </div>
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
 
       {!showForm ? (
