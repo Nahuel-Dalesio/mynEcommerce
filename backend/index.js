@@ -7,6 +7,7 @@ import pedidosRoutes from "./routes/pedidos.js";
 import dotenv from "dotenv";
 import productsRoutes from "./routes/products.js";
 import authRoutes from "./routes/auth.routes.js";
+import { iniciarCronPedidos } from "./jobs/pedidosCron.js";
 
 dotenv.config();
 
@@ -37,4 +38,5 @@ const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto :${PORT}`);
+  iniciarCronPedidos();
 });

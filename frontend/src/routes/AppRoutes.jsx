@@ -10,6 +10,7 @@ import AdminProductos from "../pages/AdminProductos";
 import Login from "../pages/Login";
 import ProtectedRoute from "../componentes/ProtectedRoute";
 import PaginaLegalRoute from "../pages/PaginaLegalRoute";
+import AdminPedidos from "../pages/AdminPedidos";
 
 export default function AppRoutes({ abrirGaleria, carrito, agregarAlCarrito, setCarrito }) {
   return (
@@ -28,6 +29,7 @@ export default function AppRoutes({ abrirGaleria, carrito, agregarAlCarrito, set
       <Route path="/login" element={<Login />} />
       <Route element={<ProtectedRoute requiredRole="admin" />}>
         <Route path="/admin/productos" element={<AdminProductos />} />
+        <Route path="/admin/pedidos" element={<AdminPedidos />} />
       </Route>
 
       <Route path="/checkout" element={<FormDatos limpiarCarrito={() => setCarrito([])} />} />
@@ -35,6 +37,7 @@ export default function AppRoutes({ abrirGaleria, carrito, agregarAlCarrito, set
       <Route path="/Contactanos" element={<Contactanos />} />
       <Route path="/Sugerencias" element={<Sugerencias />} />
       <Route path="/legal/:pagina" element={<PaginaLegalRoute />} />
+
     </Routes>
   );
 }
