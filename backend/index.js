@@ -8,6 +8,8 @@ import dotenv from "dotenv";
 import productsRoutes from "./routes/products.js";
 import authRoutes from "./routes/auth.routes.js";
 import { iniciarCronPedidos } from "./jobs/pedidosCron.js";
+import envioRoutes from "./routes/envio.js";
+import adminEnvioRoutes from "./routes/adminEnvio.js";
 
 dotenv.config();
 
@@ -30,6 +32,9 @@ TODO://Arreglar las rutas por productos o por products elegir una
 // rutas API
 app.use("/api/productos", productosRoutes);
 app.use("/api/pedidos", pedidosRoutes);
+
+app.use("/api/envios", envioRoutes);
+app.use("/api/admin/envios", adminEnvioRoutes);
 
 app.use("/api", productsRoutes);
 app.use("/api", authRoutes);

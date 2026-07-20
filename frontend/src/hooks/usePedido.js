@@ -7,7 +7,7 @@ function usePedido() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function guardarPedido({ cliente, carrito, total }) {
+  async function guardarPedido({ cliente, carrito, total, entrega }) {
     try {
       setLoading(true);
       setError(null);
@@ -21,6 +21,7 @@ function usePedido() {
           cliente,
           carrito,
           total,
+          entrega, // undefined si es retiro: el backend lo trata como retiro por default
         }),
       });
 
@@ -30,7 +31,9 @@ function usePedido() {
         throw new Error(data.error || "Error al guardar pedido");
       }
 
-      return { pedidoId: data.pedidoId, numeroPedido: data.numeroPedido }; // pedidoId
+      // data.total viene con el envío ya sumado (si aplicaba), lo devolvemos
+      // para no tener que recalcularlo en el componente.
+      return { pedidoId: data.pedidoId, numeroPedido: data.numeroPedido, total: data.total };
     } catch (err) {
       console.error(err);
       setError(err.message);

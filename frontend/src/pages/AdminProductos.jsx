@@ -93,20 +93,36 @@ const AdminProductos = () => {
         }}
       >
         <h2 style={{ margin: 0 }}>Administración de Productos</h2>
-        <Link
-          to="/admin/pedidos"
-          style={{
-            padding: "10px 20px",
-            background: "#6c757d",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            textDecoration: "none",
-            fontSize: "0.95rem",
-          }}
-        >
-          Ir a Gestión de Pedidos →
-        </Link>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Link
+            to="/admin/pedidos"
+            style={{
+              padding: "10px 20px",
+              background: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+            }}
+          >
+            Ir a Gestión de Pedidos →
+          </Link>
+          <Link
+            to="/admin/zonas-envio"
+            style={{
+              padding: "10px 20px",
+              background: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+            }}
+          >
+            Zonas de Envío →
+          </Link>
+        </div>
       </div>
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
 

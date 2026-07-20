@@ -8,15 +8,26 @@ import {
 } from "../models/pedido.model.js";
 
 export const create = async (req, res) => {
-  const { cliente, carrito, total } = req.body;
+  const { cliente, carrito, total, entrega } = req.body;
 
   if (!cliente || !carrito || !total) {
     return res.status(400).json({ error: "Datos incompletos" });
   }
 
+  // entrega es opcional (retiro por defecto), pero si viene marcada como
+  // envío, tiene que traer al menos la zona elegida.
+  if (entrega?.tipoEntrega === "envio" && !entrega.idZonaEnvio) {
+    return res.status(400).json({ error: "Falta indicar la zona de envío" });
+  }
+
   try {
-    const { idPedido, numeroPedido } = await crearPedido({ cliente, carrito, total });
-    res.json({ ok: true, pedidoId: idPedido, numeroPedido });
+    const { idPedido, numeroPedido, total: totalFinal } = await crearPedido({
+      cliente,
+      carrito,
+      total,
+      entrega,
+    });
+    res.json({ ok: true, pedidoId: idPedido, numeroPedido, total: totalFinal });
   } catch (error) {
     console.error("Error pedido:", error);
     const statusCode = error.statusCode || 500;
