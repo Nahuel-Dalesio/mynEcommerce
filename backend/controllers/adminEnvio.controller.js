@@ -1,5 +1,12 @@
 //backend/controllers/adminEnvio.controller.js
-import { obtenerTodas, obtenerPorId, actualizar as actualizarZona } from "../models/zonaEnvio.model.js";
+import {
+  obtenerTodas,
+  obtenerPorId,
+  existePorNombre,
+  crear,
+  actualizar as actualizarZona,
+  TIPOS_VALIDOS_ZONA,
+} from "../models/zonaEnvio.model.js";
 import { obtener as obtenerConfig, actualizar as actualizarConfig } from "../models/configEnvio.model.js";
 
 // --- Zonas ---
@@ -13,6 +20,41 @@ export const getZonas = async (_req, res) => {
     res.json(zonas);
   } catch (error) {
     console.error("Error al listar zonas:", error);
+    res.status(500).json({ error: "Error DB" });
+  }
+};
+
+export const createZona = async (req, res) => {
+  const { nombre, tipo, costo, activo } = req.body;
+
+  if (!nombre || !nombre.trim() || !tipo || costo === undefined) {
+    return res.status(400).json({ error: "Datos incompletos" });
+  }
+  if (!TIPOS_VALIDOS_ZONA.includes(tipo)) {
+    return res.status(400).json({
+      error: `El tipo debe ser uno de: ${TIPOS_VALIDOS_ZONA.join(", ")}`,
+    });
+  }
+  const costoNumerico = Number(costo);
+  if (isNaN(costoNumerico) || costoNumerico < 0) {
+    return res.status(400).json({ error: "El costo debe ser un número mayor o igual a 0" });
+  }
+
+  try {
+    const yaExiste = await existePorNombre(nombre.trim());
+    if (yaExiste) {
+      return res.status(409).json({ error: "Ya existe una zona de envío con ese nombre" });
+    }
+
+    const zona = await crear({
+      nombre: nombre.trim(),
+      tipo,
+      costo: costoNumerico,
+      activo: activo === undefined ? 1 : Number(Boolean(activo)),
+    });
+    res.status(201).json(zona);
+  } catch (error) {
+    console.error("Error al crear zona:", error);
     res.status(500).json({ error: "Error DB" });
   }
 };

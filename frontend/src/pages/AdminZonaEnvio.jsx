@@ -1,13 +1,17 @@
+//frontend/src/pages/AdminZonaEnvio.jsx
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useAdminEnvio } from "../hooks/useAdminEnvio";
 import BotonVolver from "../componentes/BotonVolver";
 
 const AdminZonasEnvio = () => {
-  const { loading, error, fetchZonas, updateZona, fetchConfig, updateConfig } = useAdminEnvio();
+  const { loading, error, fetchZonas, createZona, updateZona, fetchConfig, updateConfig } = useAdminEnvio();
   const [zonas, setZonas] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   const [borrador, setBorrador] = useState({ nombre: "", costo: "", activo: true });
+
+  const [creando, setCreando] = useState(false);
+  const [nuevaZona, setNuevaZona] = useState({ nombre: "", tipo: "domicilio", costo: "" });
 
   const [config, setConfig] = useState({ montoMinimoLocal: "", montoMinimoProvincias: "" });
   const [editandoConfig, setEditandoConfig] = useState(false);
@@ -81,6 +85,32 @@ const AdminZonasEnvio = () => {
       loadConfig();
     } catch (err) {
       Swal.fire("Error", "No se pudo actualizar la configuración", "error");
+    }
+  };
+
+  const handleCrearZona = async () => {
+    if (!nuevaZona.nombre.trim()) {
+      Swal.fire({ title: "Ingresá un nombre", icon: "warning" });
+      return;
+    }
+    if (!nuevaZona.costo && nuevaZona.costo !== 0) {
+      Swal.fire({ title: "Ingresá un costo", icon: "warning" });
+      return;
+    }
+    const costoNumerico = Number(nuevaZona.costo);
+    if (isNaN(costoNumerico) || costoNumerico < 0) {
+      Swal.fire({ title: "El costo debe ser un número mayor o igual a 0", icon: "warning" });
+      return;
+    }
+
+    try {
+      await createZona({ ...nuevaZona, costo: costoNumerico, activo: true });
+      Swal.fire("Creada", "Zona creada con éxito", "success");
+      setCreando(false);
+      setNuevaZona({ nombre: "", tipo: "domicilio", costo: "" });
+      loadZonas();
+    } catch (err) {
+      Swal.fire("Error", err.message || "No se pudo crear la zona", "error");
     }
   };
 
@@ -241,8 +271,68 @@ const AdminZonasEnvio = () => {
               )}
             </tr>
           ))}
+
+          {creando && (
+            <tr>
+              <td style={{ padding: "10px", border: "1px solid #ccc" }}>
+                <input
+                  type="text"
+                  placeholder="Nombre"
+                  value={nuevaZona.nombre}
+                  onChange={(e) => setNuevaZona({ ...nuevaZona, nombre: e.target.value })}
+                  style={{ width: "100%", padding: "4px" }}
+                />
+              </td>
+              <td style={{ padding: "10px", border: "1px solid #ccc" }}>
+                <select
+                  value={nuevaZona.tipo}
+                  onChange={(e) => setNuevaZona({ ...nuevaZona, tipo: e.target.value })}
+                  style={{ padding: "4px" }}
+                >
+                  <option value="domicilio">domicilio</option>
+                  <option value="terminal">terminal</option>
+                </select>
+              </td>
+              <td style={{ padding: "10px", border: "1px solid #ccc" }}>
+                <input
+                  type="number"
+                  placeholder="Costo"
+                  value={nuevaZona.costo}
+                  onChange={(e) => setNuevaZona({ ...nuevaZona, costo: e.target.value })}
+                  style={{ width: "100%", padding: "4px" }}
+                />
+              </td>
+              <td style={{ padding: "10px", border: "1px solid #ccc" }}>Activo</td>
+              <td style={{ padding: "10px", border: "1px solid #ccc", display: "flex", gap: "10px" }}>
+                <button
+                  onClick={handleCrearZona}
+                  style={{ padding: "5px 10px", background: "#28a745", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Guardar
+                </button>
+                <button
+                  onClick={() => {
+                    setCreando(false);
+                    setNuevaZona({ nombre: "", tipo: "domicilio", costo: "" });
+                  }}
+                  style={{ padding: "5px 10px", background: "#6c757d", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+                >
+                  Cancelar
+                </button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
+
+      {!creando && (
+        <button
+          onClick={() => setCreando(true)}
+          style={{ marginTop: "15px", padding: "10px 20px", background: "#007bff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
+        >
+          + Crear zona
+        </button>
+      )}
     </div>
   );
 };

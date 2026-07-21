@@ -1,3 +1,4 @@
+//frontend/src/hooks/useAdminEnvio.js
 import { useState, useCallback } from "react";
 import { BASE_URL } from "../config";
 
@@ -37,6 +38,11 @@ export function useAdminEnvio() {
 
   // --- Zonas ---
   const fetchZonas = useCallback(() => request("/zonas"), []);
+  const createZona = useCallback(
+    ({ nombre, tipo, costo, activo }) =>
+      request("/zonas", { method: "POST", body: JSON.stringify({ nombre, tipo, costo, activo }) }),
+    []
+  );
   const updateZona = useCallback(
     (id, { nombre, costo, activo }) =>
       request(`/zonas/${id}`, { method: "PUT", body: JSON.stringify({ nombre, costo, activo }) }),
@@ -54,6 +60,7 @@ export function useAdminEnvio() {
     loading,
     error,
     fetchZonas,
+    createZona,
     updateZona,
     fetchConfig,
     updateConfig,
