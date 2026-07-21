@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { findUserByEmail, createUser } from "../models/auth.model.js";
+import { findUserByEmail, findClienteById, createUser } from "../models/auth.model.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -57,12 +57,22 @@ export const login = async (req, res) => {
       { expiresIn: "8h" }
     );
 
+    let clienteData = null;
+    if (user.idCliente) {
+      clienteData = await findClienteById(user.idCliente);
+    }
+
     res.json({
       message: "Login exitoso",
       token,
       user: {
         email: user.email,
-        rol: user.rol
+        rol: user.rol,
+        ...(clienteData && {
+          nombre: clienteData.nombre,
+          apellido: clienteData.apellido,
+          telefono: clienteData.telefono,
+        }),
       }
     });
   } catch (error) {

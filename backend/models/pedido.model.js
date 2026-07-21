@@ -36,7 +36,7 @@ async function buscarOCrearCliente(conn, { nombre, apellido, telefono }) {
   return result.insertId;
 }
 
-export async function crearPedido({ cliente, carrito, total, entrega }) {
+export async function crearPedido({ cliente, carrito, total, entrega, idUsuario }) {
   const conn = await pool.getConnection();
 
   try {
@@ -69,9 +69,9 @@ export async function crearPedido({ cliente, carrito, total, entrega }) {
     const totalConEnvio = Number(total) + costoEnvio;
 
     const [pedidoResult] = await conn.query(
-      `INSERT INTO pedido (idCliente, total, estado, numeroPedido, tipoEntrega)
-       VALUES (?, ?, 'pendiente', ?, ?)`,
-      [idCliente, totalConEnvio, numeroPedido, tipoEntrega],
+      `INSERT INTO pedido (idCliente, idUsuario, total, estado, numeroPedido, tipoEntrega)
+       VALUES (?, ?, ?, 'pendiente', ?, ?)`,
+      [idCliente, idUsuario, totalConEnvio, numeroPedido, tipoEntrega],
     );
     const idPedido = pedidoResult.insertId;
 

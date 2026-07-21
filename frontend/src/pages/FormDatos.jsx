@@ -1,16 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./formDatos.css";
 import usePedido from "../hooks/usePedido.js";
 import useEnvio from "../hooks/useEnvio.js";
+import { AuthContext } from "../context/AuthContext";
 
 function FormDatos({ limpiarCarrito }) {
   const { guardarPedido, loading } = usePedido();
   const { obtenerZonas, calcularCosto, loading: loadingEnvio } = useEnvio();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState(() => {
+    if (user?.nombre && user?.apellido && user?.telefono) {
+      return { nombre: user.nombre, apellido: user.apellido, telefono: user.telefono };
+    }
     const guardado = localStorage.getItem("cliente");
     return guardado
       ? JSON.parse(guardado)

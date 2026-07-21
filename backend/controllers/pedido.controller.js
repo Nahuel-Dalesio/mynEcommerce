@@ -21,11 +21,13 @@ export const create = async (req, res) => {
   }
 
   try {
+    const idUsuario = req.user?.id || null;
     const { idPedido, numeroPedido, total: totalFinal } = await crearPedido({
       cliente,
       carrito,
       total,
       entrega,
+      idUsuario,
     });
     res.json({ ok: true, pedidoId: idPedido, numeroPedido, total: totalFinal });
   } catch (error) {

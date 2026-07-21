@@ -24,7 +24,11 @@ const Login = () => {
       if (response.ok) {
         login(data.user, data.token);
         Swal.fire("¡Bienvenido!", "Inicio de sesión exitoso.", "success");
-        navigate("/admin/productos");
+        if (data.user.rol === "admin") {
+          navigate("/admin/productos");
+        } else {
+          navigate("/");
+        }
       } else {
         Swal.fire("Error", data.message || "Credenciales inválidas", "error");
       }
@@ -36,7 +40,7 @@ const Login = () => {
   return (
     <div className="login-container" style={{ padding: "100px 20px", display: "flex", justifyContent: "center" }}>
       <div style={{ maxWidth: "400px", width: "100%", padding: "40px", border: "1px solid #ddd", borderRadius: "10px", backgroundColor: "#fff", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
-        <h2 style={{ textAlign: "center", marginBottom: "30px" }}>Acceso Administrador</h2>
+        <h2 style={{ textAlign: "center", marginBottom: "30px" }}>Iniciar sesión</h2>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <div>
             <label>Email:</label>

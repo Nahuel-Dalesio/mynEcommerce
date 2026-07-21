@@ -5,6 +5,11 @@ export const findUserByEmail = async (email) => {
   return rows[0];
 };
 
+export const findClienteById = async (idCliente) => {
+  const [rows] = await pool.query("SELECT nombre, apellido, telefono FROM cliente WHERE idCliente = ?", [idCliente]);
+  return rows[0] || null;
+};
+
 export const createUser = async ({ email, hashedPassword, nombre, apellido, telefono }) => {
   const connection = await pool.getConnection();
   try {

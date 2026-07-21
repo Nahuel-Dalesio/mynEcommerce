@@ -12,10 +12,13 @@ function usePedido() {
       setLoading(true);
       setError(null);
 
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${BASE_URL}/api/pedidos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           cliente,
