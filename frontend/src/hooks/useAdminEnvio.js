@@ -44,8 +44,8 @@ export function useAdminEnvio() {
     []
   );
   const updateZona = useCallback(
-    (id, { nombre, costo, activo }) =>
-      request(`/zonas/${id}`, { method: "PUT", body: JSON.stringify({ nombre, costo, activo }) }),
+    (id, { nombre, tipo, costo, activo }) =>
+      request(`/zonas/${id}`, { method: "PUT", body: JSON.stringify({ nombre, tipo, costo, activo }) }),
     []
   );
 

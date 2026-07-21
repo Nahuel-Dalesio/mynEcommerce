@@ -54,12 +54,12 @@ export async function crear({ nombre, tipo, costo, activo = 1 }) {
 
 // Solo se edita costo/activo (y nombre por si hace falta corregir un typo).
 // No se crean ni eliminan zonas dinámicamente: son 5 filas fijas del negocio.
-export async function actualizar(idZonaEnvio, { nombre, costo, activo }) {
+export async function actualizar(idZonaEnvio, { nombre, tipo, costo, activo }) {
   await pool.query(
     `UPDATE zonaenvio
-     SET nombre = ?, costo = ?, activo = ?
+     SET nombre = ?, tipo = ?, costo = ?, activo = ?
      WHERE idZonaEnvio = ?`,
-    [nombre, costo, activo, idZonaEnvio]
+    [nombre, tipo, costo, activo, idZonaEnvio]
   );
   return obtenerPorId(idZonaEnvio);
 }

@@ -61,10 +61,15 @@ export const createZona = async (req, res) => {
 
 export const updateZona = async (req, res) => {
   const { id } = req.params;
-  const { nombre, costo, activo } = req.body;
+  const { nombre, tipo, costo, activo } = req.body;
 
-  if (!nombre || costo === undefined || activo === undefined) {
+  if (!nombre || !tipo || costo === undefined || activo === undefined) {
     return res.status(400).json({ error: "Datos incompletos" });
+  }
+  if (!TIPOS_VALIDOS_ZONA.includes(tipo)) {
+    return res.status(400).json({
+      error: `El tipo debe ser uno de: ${TIPOS_VALIDOS_ZONA.join(", ")}`,
+    });
   }
 
   try {
@@ -73,7 +78,7 @@ export const updateZona = async (req, res) => {
       return res.status(404).json({ error: "Zona no encontrada" });
     }
 
-    const zona = await actualizarZona(id, { nombre, costo, activo });
+    const zona = await actualizarZona(id, { nombre, tipo, costo, activo });
     res.json(zona);
   } catch (error) {
     console.error("Error al actualizar zona:", error);

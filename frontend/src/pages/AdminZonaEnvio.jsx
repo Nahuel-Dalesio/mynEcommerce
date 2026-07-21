@@ -8,7 +8,7 @@ const AdminZonasEnvio = () => {
   const { loading, error, fetchZonas, createZona, updateZona, fetchConfig, updateConfig } = useAdminEnvio();
   const [zonas, setZonas] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
-  const [borrador, setBorrador] = useState({ nombre: "", costo: "", activo: true });
+  const [borrador, setBorrador] = useState({ nombre: "", tipo: "domicilio", costo: "", activo: true });
 
   const [creando, setCreando] = useState(false);
   const [nuevaZona, setNuevaZona] = useState({ nombre: "", tipo: "domicilio", costo: "" });
@@ -33,7 +33,7 @@ const AdminZonasEnvio = () => {
 
   const handleEditar = (zona) => {
     setEditandoId(zona.idZonaEnvio);
-    setBorrador({ nombre: zona.nombre, costo: zona.costo, activo: !!zona.activo });
+    setBorrador({ nombre: zona.nombre, tipo: zona.tipo, costo: zona.costo, activo: !!zona.activo });
   };
 
   const handleGuardar = async (idZonaEnvio) => {
@@ -65,7 +65,7 @@ const AdminZonasEnvio = () => {
     if (!result.isConfirmed) return;
 
     try {
-      await updateZona(zona.idZonaEnvio, { nombre: zona.nombre, costo: zona.costo, activo: nuevoEstado });
+      await updateZona(zona.idZonaEnvio, { nombre: zona.nombre, tipo: zona.tipo, costo: zona.costo, activo: nuevoEstado });
       Swal.fire(
         nuevoEstado ? "Reactivada" : "Desactivada",
         `La zona ha sido ${nuevoEstado ? "reactivada" : "desactivada"}.`,
@@ -201,7 +201,16 @@ const AdminZonasEnvio = () => {
                       style={{ width: "100%", padding: "4px" }}
                     />
                   </td>
-                  <td style={{ padding: "10px", border: "1px solid #ccc" }}>{zona.tipo}</td>
+                  <td style={{ padding: "10px", border: "1px solid #ccc" }}>
+                    <select
+                      value={borrador.tipo}
+                      onChange={(e) => setBorrador({ ...borrador, tipo: e.target.value })}
+                      style={{ padding: "4px" }}
+                    >
+                      <option value="domicilio">domicilio</option>
+                      <option value="terminal">terminal</option>
+                    </select>
+                  </td>
                   <td style={{ padding: "10px", border: "1px solid #ccc" }}>
                     <input
                       type="number"
