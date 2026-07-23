@@ -2,6 +2,9 @@
 
 Tienda online de indumentaria. Catálogo de productos con talles y stock, carrito de compras y checkout vía WhatsApp (sin pasarela de pago). Incluye panel de administración para gestionar productos, imágenes, stock y pedidos.
 
+> ⚠️ Este repositorio contiene una versión de referencia del proyecto.
+> El desarrollo completo y actualizado se encuentra en un repositorio privado.
+
 ## Stack
 
 - **Backend**: Node.js + Express + MySQL (mysql2)
